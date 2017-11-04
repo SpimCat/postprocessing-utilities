@@ -4,6 +4,8 @@ import clearcl.*;
 import clearcl.backend.ClearCLBackendInterface;
 import clearcl.backend.javacl.ClearCLBackendJavaCL;
 import com.drew.imaging.ImageProcessingException;
+import de.mpicbg.haase.contrastmeasurement.scijava.statistics.Average;
+import de.mpicbg.haase.contrastmeasurement.scijava.statistics.StandardDeviation;
 import ij.ImagePlus;
 import ij.gui.NewImage;
 import ij.process.ImageProcessor;
@@ -33,7 +35,7 @@ public class StandardDeviationPerSliceMeasurement<T extends RealType<T>> impleme
 {
   private ClearCLContext mContext;
 
-  @Parameter private Img<UnsignedShortType> image;
+  @Parameter private Img<T> image;
 
   @Parameter private UIService uiService;
 
@@ -47,26 +49,10 @@ public class StandardDeviationPerSliceMeasurement<T extends RealType<T>> impleme
 
     for (int z = 0; z < numberOfSlices; z++)
     {
-      RandomAccessibleInterval<UnsignedShortType>
+      RandomAccessibleInterval<T>
           slice = Views.hyperSlice(image, 2, z);
 
-      Cursor<UnsignedShortType> cursor = Views.iterable(slice).localizingCursor();
-
-      double sum = 0;
-      long count = 0;
-      while (cursor.hasNext()) {
-        sum += cursor.next().get();
-        count++;
-      }
-      double mean = sum / count;
-
-      sum = 0;
-      cursor.reset();
-      while (cursor.hasNext()) {
-        sum += Math.pow(cursor.next().get() - mean, 2);
-      }
-      double stdDev = sum / (count - 1);
-      System.out.println("z: " + z + " stddev:" + stdDev);
+      double stdDev = new StandardDeviation<T>(slice).getStandardDevation();
       standardDeviationPerSlice[z] = stdDev;
     }
     System.out.println("Shown images");
