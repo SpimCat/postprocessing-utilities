@@ -1,22 +1,27 @@
 package de.mpicbg.haase.contrastmeasurement;
 
-import de.mpicbg.haase.contrastmeasurement.scijava.ArgMaxProjection;
-import de.mpicbg.haase.contrastmeasurement.scijava.StandardDeviationPerPixelMeasurement;
-import de.mpicbg.haase.contrastmeasurement.scijava.ZMapProjection;
+import de.mpicbg.haase.contrastmeasurement.scijava.*;
 import net.imagej.Dataset;
 import net.imagej.ImageJ;
+import net.imglib2.RandomAccessible;
 import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.RealRandomAccess;
+import net.imglib2.RealRandomAccessible;
 import net.imglib2.img.Img;
 import net.imglib2.interpolation.InterpolatorFactory;
 import net.imglib2.interpolation.randomaccess.NLinearInterpolatorFactory;
 import net.imglib2.outofbounds.OutOfBoundsBorderFactory;
 import net.imglib2.outofbounds.OutOfBoundsConstantValueFactory;
 import net.imglib2.outofbounds.OutOfBoundsMirrorSingleBoundary;
+import net.imglib2.realtransform.RealViews;
+import net.imglib2.realtransform.Scale;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.integer.UnsignedShortType;
 import net.imglib2.type.numeric.real.FloatType;
+import net.imglib2.util.Intervals;
 import net.imglib2.view.Views;
 
+import java.nio.file.attribute.UserDefinedFileAttributeView;
 import java.util.Random;
 
 public class Main
@@ -36,7 +41,7 @@ public class Main
         //
     //    System.out.println(dataset.getClass().getCanonicalName());
     //
-    //    testStdDevCalculation(dataset);
+    //    Img<UnsignedShortType> stdDevImage = testStdDevCalculation(dataset);
 
     Dataset datasetStdDev = (Dataset)
         ij.io()
@@ -48,15 +53,32 @@ public class Main
     Img<UnsignedShortType> stdDevImage = (Img)datasetStdDev;
 
     ArgMaxProjection maxProjector = new ArgMaxProjection(stdDevImage);
-    ij.ui().show("max", maxProjector.getMaxProjection());
+    RandomAccessibleInterval<FloatType> maxProjection = maxProjector.getMaxProjection();
 
     Img<UnsignedShortType> zMap = maxProjector.getArgMaxProjection();
+    ij.ui().show("max", maxProjection);
     ij.ui().show("argMax", zMap);
 
+
+    RandomAccessibleInterval upsampledMaxProjection = sample(maxProjection, 1.0 / xyDownScalingFactor);
     RandomAccessibleInterval upsampledZMap = sample(zMap, 1.0 / xyDownScalingFactor);
+    ij.ui().show("upsampled argMax", upsampledMaxProjection);
+    ij.ui().show("upsampled argMax", upsampledZMap);
 
     ZMapProjection<UnsignedShortType, UnsignedShortType> zMapProjector = new ZMapProjection<UnsignedShortType, UnsignedShortType>(input, upsampledZMap);
-    ij.ui().show("projection", zMapProjector.getProjection());
+    RandomAccessibleInterval edfProjection =  zMapProjector.getProjection();
+    ij.ui().show("projection", edfProjection);
+
+
+    ThresholdImage thresholder = new ThresholdImage(upsampledMaxProjection, 1000.0);
+    RandomAccessibleInterval goodRegion = thresholder.getBinary();
+
+    ij.ui().show(goodRegion);
+
+    PixelwiseImageProduct pixelwiseImageProduct = new PixelwiseImageProduct(edfProjection, goodRegion);
+    RandomAccessibleInterval product = pixelwiseImageProduct.getProduct();
+
+    ij.ui().show(product);
   }
 
   private static Img<FloatType> testStdDevCalculation(Img img) throws
