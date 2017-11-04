@@ -1,6 +1,8 @@
 package de.mpicbg.haase.contrastmeasurement;
 
 import de.mpicbg.haase.contrastmeasurement.scijava.*;
+import de.mpicbg.haase.contrastmeasurement.scijava.statistics.Average;
+import de.mpicbg.haase.contrastmeasurement.scijava.statistics.StandardDeviation;
 import net.imagej.Dataset;
 import net.imagej.ImageJ;
 import net.imglib2.RandomAccessible;
@@ -28,7 +30,9 @@ public class Main
 {
   final static ImageJ ij = new ImageJ();
 
-  final static double xyDownScalingFactor = 0.25;
+  final static double xyDownScalingFactor = 0.125;
+  final static int radius = 5;
+
 
   public static void main(final String... args) throws Exception
   {
@@ -38,12 +42,9 @@ public class Main
     ij.ui().show(dataset);
 
     Img<UnsignedShortType> input = (Img)dataset;
-        //
-    //    System.out.println(dataset.getClass().getCanonicalName());
-    //
-    //    Img<UnsignedShortType> stdDevImage = testStdDevCalculation(dataset);
 
-    Dataset datasetStdDev = (Dataset)
+
+    /*Dataset datasetStdDev = (Dataset)
         ij.io()
           .open(
               "C:\\structure\\data\\xwing\\2017-11-01-EDF\\EDF5_focus_going_through_lightsheet_10_stdDev.tif");
@@ -51,6 +52,16 @@ public class Main
     ij.ui().show(datasetStdDev);
 
     Img<UnsignedShortType> stdDevImage = (Img)datasetStdDev;
+*/
+    RandomAccessibleInterval
+        downScaledImg = sample(input, xyDownScalingFactor);
+
+
+    Img<FloatType>
+        stdDevImage =
+        StandardDeviationPerPixelMeasurement.process(downScaledImg,
+                                                     radius);
+
 
     ArgMaxProjection maxProjector = new ArgMaxProjection(stdDevImage);
     RandomAccessibleInterval<FloatType> maxProjection = maxProjector.getMaxProjection();
@@ -69,39 +80,24 @@ public class Main
     RandomAccessibleInterval edfProjection =  zMapProjector.getProjection();
     ij.ui().show("projection", edfProjection);
 
+    Average average = new Average(maxProjection);
+    StandardDeviation standardDeviation = new StandardDeviation(maxProjection, average);
 
-    ThresholdImage thresholder = new ThresholdImage(upsampledMaxProjection, 1000.0);
+    double threshold = average.getAverage();// + standardDeviation.getStandardDevation() * 2;
+
+    System.out.println("Threshold: " + threshold);
+
+    ThresholdImage thresholder = new ThresholdImage(upsampledMaxProjection, threshold);
     RandomAccessibleInterval goodRegion = thresholder.getBinary();
 
-    ij.ui().show(goodRegion);
+    ij.ui().show("good region", goodRegion);
 
     PixelwiseImageProduct pixelwiseImageProduct = new PixelwiseImageProduct(edfProjection, goodRegion);
     RandomAccessibleInterval product = pixelwiseImageProduct.getProduct();
 
-    ij.ui().show(product);
+    ij.ui().show("EDF", product);
   }
 
-  private static Img<FloatType> testStdDevCalculation(Img img) throws
-                                                               Exception
-  {
-
-    ij.ui().show(img);
-
-
-    RandomAccessibleInterval
-        downScaledImg = sample(img, xyDownScalingFactor);
-
-    int radius = 5;
-
-    Img<FloatType>
-        stdDevImage =
-        StandardDeviationPerPixelMeasurement.process(downScaledImg,
-                                                     radius);
-
-    System.out.println("Bye!");
-
-    return stdDevImage;
-  }
 
   private static <T extends RealType<T>> RandomAccessibleInterval<T> sample(RandomAccessibleInterval<T> img, double factor) {
 
