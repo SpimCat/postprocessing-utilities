@@ -37,7 +37,7 @@ public class StandardDeviationPerPixelMeasurement<T extends RealType<T>> impleme
 
   @Override public void run()
   {
-    System.out.println("Size " + image.dimension(2));
+    System.out.println("Size " + image.dimension(0) + "/" + image.dimension(1) + "/" + image.dimension(2));
     int numberOfSlices = (int) image.dimension(2);
 
         stdDevImg =
