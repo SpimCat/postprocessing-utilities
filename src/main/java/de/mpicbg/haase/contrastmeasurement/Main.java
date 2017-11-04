@@ -8,25 +8,27 @@ import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.Img;
 import net.imglib2.interpolation.InterpolatorFactory;
 import net.imglib2.interpolation.randomaccess.NLinearInterpolatorFactory;
+import net.imglib2.type.numeric.real.FloatType;
 
 public class Main
 {
+  final static ImageJ ij = new ImageJ();
+
   public static void main(final String... args) throws Exception
   {
-    // Run ImageJ
-    final ImageJ ij = new ImageJ();
     ij.ui().showUI();
+
     Object object = ij.io().open("C:\\structure\\data\\xwing\\2017-11-01-EDF\\EDF5_focus_going_through_lightsheet_10.tif");
     Dataset dataset = (Dataset)object;
     ij.ui().show(dataset);
 
     System.out.println(dataset.getClass().getCanonicalName());
 
-    // Create test data
-    int size = 256;
+    testStdDevCalculation(dataset);
+  }
 
-    Img img = dataset;
-
+  private static Img<FloatType> testStdDevCalculation(Img img) throws Exception
+  {
 
     ij.ui().show(img);
 
@@ -42,9 +44,10 @@ public class Main
                        "image", downScaledImg};
 
     //ij.command().run(StandardDeviationPerSliceMeasurement.class, true, imglibParameters);
-    ij.command().run(StandardDeviationPerPixelMeasurement.class, true, imglibParameters);
+    Img<FloatType> stdDevImage = (Img<FloatType>) ij.command().run(StandardDeviationPerPixelMeasurement.class, true, imglibParameters);
 
     System.out.println("Bye!");
 
+    return stdDevImage;
   }
 }
