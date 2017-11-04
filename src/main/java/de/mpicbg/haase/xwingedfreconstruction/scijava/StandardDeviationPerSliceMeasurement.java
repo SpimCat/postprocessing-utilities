@@ -1,6 +1,5 @@
 package de.mpicbg.haase.xwingedfreconstruction.scijava;
 
-import clearcl.*;
 import de.mpicbg.haase.xwingedfreconstruction.scijava.statistics.StandardDeviation;
 import net.imglib2.Cursor;
 import net.imglib2.RandomAccessibleInterval;
