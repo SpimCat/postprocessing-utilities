@@ -96,6 +96,68 @@ public class Main
 
     //OutOfBoundsBorderFactory<T, RandomAccessibleInterval<T>> outOfBoundsBorderFactory = new OutOfBoundsBorderFactory<T, RandomAccessibleInterval<T>>();
 
+    long[] size = new long[img.numDimensions()];
+    for (int d = 0 ; d < img.numDimensions(); d++) {
+      size[d] = img.dimension(d);
+    }
+
+    RealRandomAccessible<T>
+        interpolated = Views.interpolate(Views.expandBorder(img, size), interpolatorFactory);
+
+    double[] scaling = new double[img.numDimensions()];
+    for (int d = 0 ; d < 2; d++) {
+      scaling[d] = factor;
+    }
+    if (img.numDimensions() > 2) {
+      scaling[2] = 1.0;
+    }
+
+    RealRandomAccessible scaled = RealViews.affine(interpolated, new Scale(scaling));
+
+    RandomAccessible sampled = Views.raster(scaled);
+
+    long[] newSize = new long[img.numDimensions() * 2];
+    for (int d = 0; d < 2; d++) {
+      newSize[d+img.numDimensions()] = (long)(img.dimension(d) * factor);
+    }
+    if (img.numDimensions() > 2) {
+      newSize[2 + img.numDimensions()] = img.dimension(2);
+    }
+
+    return Views.interval(sampled, Intervals.createMinSize(newSize));
+
+    /**
+     * Following block does not work, with this error message:
+     * Exception in thread "main" java.lang.IllegalArgumentException: No matching 'net.imagej.ops.transform.scaleView.DefaultScaleView' op
+
+     Request:
+     -	net.imagej.ops.transform.scaleView.DefaultScaleView(
+     IntervalView,
+     double[],
+     NLinearInterpolatorFactory)
+
+     Candidates:
+     1. 	(RandomAccessibleInterval out) =
+     net.imagej.ops.transform.scaleView.DefaultScaleView(
+     RandomAccessibleInterval in,
+     double[] scaleFactors,
+     InterpolatorFactory interpolator,
+     OutOfBoundsFactory outOfBoundsFactory?)
+     Inputs do not conform to op rules
+     in = net.imglib2.view.IntervalView@6a12c7a8
+     scaleFactors = [D@161aa04a
+     interpolator = net.imglib2.interpolation.randomaccess.NLinearInterpolatorFactory@436bd4df
+     outOfBoundsFactory = net.imglib2.outofbounds.OutOfBoundsMirrorFactory@6848a051
+
+     at net.imagej.ops.DefaultOpMatchingService.singleMatch(DefaultOpMatchingService.java:433)
+     at net.imagej.ops.DefaultOpMatchingService.findMatch(DefaultOpMatchingService.java:98)
+     at net.imagej.ops.DefaultOpMatchingService.findMatch(DefaultOpMatchingService.java:84)
+     at net.imagej.ops.OpEnvironment.module(OpEnvironment.java:268)
+     at net.imagej.ops.OpEnvironment.run(OpEnvironment.java:156)
+     at net.imagej.ops.transform.TransformNamespace.scale(TransformNamespace.java:679)
+     at de.mpicbg.haase.contrastmeasurement.Main.sample(Main.java:[[[following line]]])
+     at de.mpicbg.haase.contrastmeasurement.Main.main(Main.java:56)
+
     return ij.op()
       .transform()
       .scale(Views.expandBorder(img, new long[]{img.dimension(0), img.dimension(1), img.dimension(2)}),
