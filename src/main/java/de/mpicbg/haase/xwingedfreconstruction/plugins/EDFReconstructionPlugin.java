@@ -82,7 +82,7 @@ public class EDFReconstructionPlugin<T extends RealType<T>> implements Command
         pixelwiseImageProduct = new PixelwiseImageProduct(edfProjection, goodRegion);
     RandomAccessibleInterval product = pixelwiseImageProduct.getProduct();
 
-    uiService.show("EDF", product);
+    uiService.show("EDF from " + input.dimension(2), product);
   }
 
 

@@ -30,10 +30,10 @@ public class ArgMaxProjectionPlugin<T extends RealType<T>> implements Command
     ArgMaxProjection<T> argMaxProjection = new ArgMaxProjection<T>(
         input);
     if (showArgMaxProjection) {
-      uiService.show("ArgMax ", argMaxProjection.getArgMaxProjection());
+      uiService.show("ArgMax  from " + input.dimension(2), argMaxProjection.getArgMaxProjection());
     }
     if (showMaxProjection) {
-      uiService.show("Max ", argMaxProjection.getMaxProjection());
+      uiService.show("Max  from " + input.dimension(2), argMaxProjection.getMaxProjection());
     }
   }
 }

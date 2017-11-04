@@ -42,6 +42,6 @@ public class BestFocusProjectionPlugin<T extends RealType<T>> implements Command
     RandomAccessibleInterval<T>
         slice = Views.hyperSlice(input, 2, argMax);
 
-    uiService.show("Best focus slice", slice);
+    uiService.show("Best focus slice from " + input.dimension(2), slice);
   }
 }
