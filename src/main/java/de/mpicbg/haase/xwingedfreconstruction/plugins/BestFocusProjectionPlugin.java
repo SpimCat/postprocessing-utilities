@@ -1,5 +1,6 @@
 package de.mpicbg.haase.xwingedfreconstruction.plugins;
 
+import de.mpicbg.haase.xwingedfreconstruction.scijava.DCTS2DImglib2;
 import de.mpicbg.haase.xwingedfreconstruction.scijava.StandardDeviationPerSliceMeasurement;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.Img;
@@ -23,9 +24,11 @@ public class BestFocusProjectionPlugin<T extends RealType<T>> implements Command
 
   @Override public void run()
   {
-    StandardDeviationPerSliceMeasurement standardDeviationPerSliceMeasurement = new StandardDeviationPerSliceMeasurement(input);
+    /*StandardDeviationPerSliceMeasurement standardDeviationPerSliceMeasurement = new StandardDeviationPerSliceMeasurement(input);
 
     double[] stdDevs = standardDeviationPerSliceMeasurement.getStandardDeviationPerSlice();
+*/
+    double[] stdDevs = new DCTS2DImglib2(input).getDcts2d();
 
     double max = stdDevs[0];
     long argMax = 0;

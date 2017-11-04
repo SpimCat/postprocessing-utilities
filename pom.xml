@@ -115,8 +115,17 @@
 			<artifactId>ClearCL</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>net.clearcontrol</groupId>
+			<artifactId>ClearControl</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>net.haesleinhuepf</groupId>
 			<artifactId>ClearUtilities</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.github.wendykierp</groupId>
+			<artifactId>JTransforms</artifactId>
+			<version>3.1.2-RH</version>
 		</dependency>
 	</dependencies>
 
