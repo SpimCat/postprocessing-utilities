@@ -1,7 +1,6 @@
-package de.mpicbg.haase.contrastmeasurement.plugins;
+package de.mpicbg.haase.xwingedfreconstruction.plugins;
 
-import de.mpicbg.haase.contrastmeasurement.scijava.ArgMaxProjection;
-import net.imglib2.RealRandomAccessible;
+import de.mpicbg.haase.xwingedfreconstruction.scijava.ArgMaxProjection;
 import net.imglib2.img.Img;
 import net.imglib2.type.numeric.RealType;
 import org.scijava.command.Command;

@@ -1,15 +1,14 @@
-package de.mpicbg.haase.contrastmeasurement.plugins;
+package de.mpicbg.haase.xwingedfreconstruction.plugins;
 
-import de.mpicbg.haase.contrastmeasurement.scijava.*;
-import de.mpicbg.haase.contrastmeasurement.scijava.statistics.Average;
-import de.mpicbg.haase.contrastmeasurement.scijava.statistics.StandardDeviation;
+import de.mpicbg.haase.xwingedfreconstruction.scijava.*;
+import de.mpicbg.haase.xwingedfreconstruction.scijava.statistics.Average;
+import de.mpicbg.haase.xwingedfreconstruction.scijava.statistics.StandardDeviation;
 import net.imglib2.RandomAccessible;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.RealRandomAccessible;
 import net.imglib2.img.Img;
 import net.imglib2.interpolation.InterpolatorFactory;
 import net.imglib2.interpolation.randomaccess.NLinearInterpolatorFactory;
-import net.imglib2.ops.parse.token.Real;
 import net.imglib2.realtransform.RealViews;
 import net.imglib2.realtransform.Scale;
 import net.imglib2.type.numeric.RealType;
@@ -27,8 +26,8 @@ import org.scijava.ui.UIService;
  * November 2017
  */
 
-@Plugin(type = Command.class, menuPath = "XWing>Reconstruction>[Arg]Max projection")
-public class EDFProjection<T extends RealType<T>> implements Command
+@Plugin(type = Command.class, menuPath = "XWing>Reconstruction>EDF reconstruction")
+public class EDFReconstruction<T extends RealType<T>> implements Command
 {
   @Parameter private Img<T> input;
 

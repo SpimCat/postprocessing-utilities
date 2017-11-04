@@ -1,15 +1,10 @@
-package de.mpicbg.haase.contrastmeasurement.scijava;
+package de.mpicbg.haase.xwingedfreconstruction.scijava;
 
-import com.sun.org.apache.regexp.internal.RE;
-import net.imagej.ops.create.img.Imgs;
 import net.imglib2.Cursor;
 import net.imglib2.RandomAccess;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.Img;
-import net.imglib2.img.array.ArrayImg;
-import net.imglib2.img.array.ArrayImgFactory;
 import net.imglib2.img.array.ArrayImgs;
-import net.imglib2.type.NativeType;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.integer.UnsignedShortType;
 import net.imglib2.type.numeric.real.FloatType;

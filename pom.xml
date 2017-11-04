@@ -13,12 +13,12 @@
 	</parent>
 
 	<groupId>de.mpicbg.haase</groupId>
-	<artifactId>contrast_measurement</artifactId>
+	<artifactId>XWingEDFReconstruction</artifactId>
 	<version>0.1.0-SNAPSHOT</version>
 
-	<name>contrast_measurement</name>
-	<description>contrast_measurement</description>
-	<url>https://github.com/haesleinhuepf/contrast_measurement</url>
+	<name>XWingEDFReconstruction</name>
+	<description>XWingEDFReconstruction</description>
+	<url>https://github.com/haesleinhuepf/XWingEDFReconstruction</url>
 	<inceptionYear>2017</inceptionYear>
 	<organization>
 		<name>MPI CBG</name>
@@ -61,8 +61,8 @@
 	</mailingLists>
 
 	<scm>
-		<connection>scm:git:git://github.com/haesleinhuepf/contrast_measurement</connection>
-        <developerConnection>scm:git:git@github.com/haesleinhuepf/contrast_measurement</developerConnection>
+		<connection>scm:git:git://github.com/haesleinhuepf/XWingEDFReconstruction</connection>
+        <developerConnection>scm:git:git@github.com/haesleinhuepf/XWingEDFReconstruction</developerConnection>
         <tag>HEAD</tag>
 		<url>https://github.com/haesleinhuepf/contrast_measurement</url>
 	</scm>
@@ -76,7 +76,7 @@
 
 	<properties>
 		<package-name>de.mpicbg.haase</package-name>
-		<main-class>de.mpicbg.haase.contrastmeasurement.Main</main-class>
+		<main-class>de.mpicbg.haase.xwingedfreconstruction.Demo</main-class>
 		<license.licenseName>bsd_3</license.licenseName>
 		<license.copyrightOwners>Robert Haase</license.copyrightOwners>
 		<imagej.app.directory>C:/Programs/Fiji.app/</imagej.app.directory>

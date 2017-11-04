@@ -1,4 +1,4 @@
-package de.mpicbg.haase.contrastmeasurement.scijava.statistics;
+package de.mpicbg.haase.xwingedfreconstruction.scijava.statistics;
 
 import net.imglib2.Cursor;
 import net.imglib2.RandomAccessibleInterval;

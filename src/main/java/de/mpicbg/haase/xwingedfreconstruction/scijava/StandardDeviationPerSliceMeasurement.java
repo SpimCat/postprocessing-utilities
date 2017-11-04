@@ -1,34 +1,17 @@
-package de.mpicbg.haase.contrastmeasurement.scijava;
+package de.mpicbg.haase.xwingedfreconstruction.scijava;
 
 import clearcl.*;
-import clearcl.backend.ClearCLBackendInterface;
-import clearcl.backend.javacl.ClearCLBackendJavaCL;
-import com.drew.imaging.ImageProcessingException;
-import de.mpicbg.haase.contrastmeasurement.scijava.statistics.Average;
-import de.mpicbg.haase.contrastmeasurement.scijava.statistics.StandardDeviation;
-import ij.ImagePlus;
-import ij.gui.NewImage;
-import ij.process.ImageProcessor;
-import net.haesleinhuepf.clearcl.utilities.ClearCLImageImgConverter;
+import de.mpicbg.haase.xwingedfreconstruction.scijava.statistics.StandardDeviation;
 import net.imglib2.Cursor;
-import net.imglib2.Localizable;
-import net.imglib2.RandomAccess;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.Img;
-import net.imglib2.img.array.ArrayImg;
-import net.imglib2.img.array.ArrayImgs;
-import net.imglib2.img.display.imagej.ImageJFunctions;
 import net.imglib2.type.numeric.RealType;
-import net.imglib2.type.numeric.integer.ShortType;
 import net.imglib2.type.numeric.integer.UnsignedShortType;
-import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.view.Views;
 import org.scijava.command.Command;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.ui.UIService;
-
-import java.io.IOException;
 
 @Plugin(type = Command.class)
 public class StandardDeviationPerSliceMeasurement<T extends RealType<T>> implements Command

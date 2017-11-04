@@ -1,4 +1,4 @@
-package de.mpicbg.haase.contrastmeasurement.scijava;
+package de.mpicbg.haase.xwingedfreconstruction.scijava;
 
 import net.imglib2.Cursor;
 import net.imglib2.RandomAccess;
@@ -6,7 +6,6 @@ import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.array.ArrayImgs;
 import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.RealType;
-import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.view.Views;
 
 /**

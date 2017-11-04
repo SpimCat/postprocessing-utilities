@@ -1,7 +1,5 @@
-package de.mpicbg.haase.contrastmeasurement.scijava;
+package de.mpicbg.haase.xwingedfreconstruction.scijava;
 
-import net.imglib2.Cursor;
-import net.imglib2.Interval;
 import net.imglib2.RandomAccess;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.algorithm.neighborhood.Neighborhood;
@@ -9,9 +7,7 @@ import net.imglib2.algorithm.neighborhood.RectangleShape;
 import net.imglib2.img.Img;
 import net.imglib2.img.planar.PlanarImgs;
 import net.imglib2.type.numeric.RealType;
-import net.imglib2.type.numeric.integer.UnsignedShortType;
 import net.imglib2.type.numeric.real.FloatType;
-import net.imglib2.util.Intervals;
 import net.imglib2.view.Views;
 import org.scijava.ItemIO;
 import org.scijava.command.Command;
