@@ -20,8 +20,13 @@ public class Demo
   public static void main(final String... args) throws Exception
   {
     ij.ui().showUI();
+    demo("C:\\structure\\data\\xwing\\2017-11-01-EDF\\EDF5_focus_going_through_lightsheet_10.tif");
+    //demo("C:\\structure\\data\\xwing\\2017-11-01-EDF\\EDF5_focus_going_through_lightsheet-twisted.tif");
+  }
 
-    Dataset dataset = (Dataset)ij.io().open("C:\\structure\\data\\xwing\\2017-11-01-EDF\\EDF5_focus_going_through_lightsheet_10.tif");
+  private static void demo(String filename) throws Exception
+  {
+    Dataset dataset = (Dataset)ij.io().open(filename);
     ij.ui().show(dataset);
 
     Img<UnsignedShortType> input = (Img)dataset;
