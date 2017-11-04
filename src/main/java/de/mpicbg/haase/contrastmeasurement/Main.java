@@ -29,8 +29,6 @@ public class Main
         new Object[] { "radius", 5,
                        "image", img};
 
-    ij.op().filter().
-
     ij.ui().show(img);
 
     //ij.command().run(StandardDeviationPerSliceMeasurement.class, true, imglibParameters);
