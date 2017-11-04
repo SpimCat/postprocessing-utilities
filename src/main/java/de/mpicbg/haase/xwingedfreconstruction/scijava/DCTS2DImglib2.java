@@ -55,9 +55,6 @@ public class DCTS2DImglib2<T extends RealType<T>>
         RandomAccessibleInterval<T>
             slice = Views.hyperSlice(image, 2, z);
 
-        // danger: the order of how we get the pixels is not garanteed. it may be better to go through the image with a random access
-
-
         dcts2d[z] = entropyOfSlice(slice, array, lDCTForWidthAndHeight, pWidth, pHeight, pPSFSupportRadius);
       }
     }
@@ -65,6 +62,8 @@ public class DCTS2DImglib2<T extends RealType<T>>
   }
 
   private double entropyOfSlice(RandomAccessibleInterval<T> slice, double[] array, DoubleDCT_2D lDCTForWidthAndHeight, int pWidth, int pHeight, int pPSFSupportRadius) {
+
+    // todo: the order of how we get the pixels is not garanteed. it may be better to go through the image with a random access
     Cursor<T> cursor = Views.iterable(slice).cursor();
     int count = 0;
     while (cursor.hasNext())
