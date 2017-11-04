@@ -1,5 +1,6 @@
 package de.mpicbg.haase.contrastmeasurement;
 
+import de.mpicbg.haase.contrastmeasurement.plugins.EDFProjection;
 import de.mpicbg.haase.contrastmeasurement.scijava.*;
 import de.mpicbg.haase.contrastmeasurement.scijava.statistics.Average;
 import de.mpicbg.haase.contrastmeasurement.scijava.statistics.StandardDeviation;
@@ -30,8 +31,8 @@ public class Main
 {
   final static ImageJ ij = new ImageJ();
 
-  final static double xyDownScalingFactor = 0.125;
-  final static int radius = 5;
+  final static double downScalingFactor = 0.125;
+  final static int focusedRegionRadius = 5;
 
 
   public static void main(final String... args) throws Exception
@@ -43,99 +44,14 @@ public class Main
 
     Img<UnsignedShortType> input = (Img)dataset;
 
+    Object[] parameters = new Object[]{
+        "input", input,
+        "focusedRegionRadius", focusedRegionRadius,
+        "samplingFactor", downScalingFactor
+    };
 
-    /*Dataset datasetStdDev = (Dataset)
-        ij.io()
-          .open(
-              "C:\\structure\\data\\xwing\\2017-11-01-EDF\\EDF5_focus_going_through_lightsheet_10_stdDev.tif");
-
-    ij.ui().show(datasetStdDev);
-
-    Img<UnsignedShortType> stdDevImage = (Img)datasetStdDev;
-*/
-    RandomAccessibleInterval
-        downScaledImg = sample(input, xyDownScalingFactor);
-
-
-    Img<FloatType>
-        stdDevImage =
-        StandardDeviationPerPixelMeasurement.process(downScaledImg,
-                                                     radius);
-
-
-    ArgMaxProjection maxProjector = new ArgMaxProjection(stdDevImage);
-    RandomAccessibleInterval<FloatType> maxProjection = maxProjector.getMaxProjection();
-
-    Img<UnsignedShortType> zMap = maxProjector.getArgMaxProjection();
-    ij.ui().show("max", maxProjection);
-    ij.ui().show("argMax", zMap);
-
-
-    RandomAccessibleInterval upsampledMaxProjection = sample(maxProjection, 1.0 / xyDownScalingFactor);
-    RandomAccessibleInterval upsampledZMap = sample(zMap, 1.0 / xyDownScalingFactor);
-    ij.ui().show("upsampled argMax", upsampledMaxProjection);
-    ij.ui().show("upsampled argMax", upsampledZMap);
-
-    ZMapProjection<UnsignedShortType, UnsignedShortType> zMapProjector = new ZMapProjection<UnsignedShortType, UnsignedShortType>(input, upsampledZMap);
-    RandomAccessibleInterval edfProjection =  zMapProjector.getProjection();
-    ij.ui().show("projection", edfProjection);
-
-    Average average = new Average(maxProjection);
-    StandardDeviation standardDeviation = new StandardDeviation(maxProjection, average);
-
-    double threshold = average.getAverage();// + standardDeviation.getStandardDevation() * 2;
-
-    System.out.println("Threshold: " + threshold);
-
-    ThresholdImage thresholder = new ThresholdImage(upsampledMaxProjection, threshold);
-    RandomAccessibleInterval goodRegion = thresholder.getBinary();
-
-    ij.ui().show("good region", goodRegion);
-
-    PixelwiseImageProduct pixelwiseImageProduct = new PixelwiseImageProduct(edfProjection, goodRegion);
-    RandomAccessibleInterval product = pixelwiseImageProduct.getProduct();
-
-    ij.ui().show("EDF", product);
+    ij.command().run(EDFProjection.class, true, parameters);
   }
 
 
-  private static <T extends RealType<T>> RandomAccessibleInterval<T> sample(RandomAccessibleInterval<T> img, double factor) {
-
-    InterpolatorFactory
-        interpolatorFactory =
-        new NLinearInterpolatorFactory<>();
-
-    //OutOfBoundsBorderFactory<T, RandomAccessibleInterval<T>> outOfBoundsBorderFactory = new OutOfBoundsBorderFactory<T, RandomAccessibleInterval<T>>();
-
-    long[] size = new long[img.numDimensions()];
-    for (int d = 0 ; d < img.numDimensions(); d++) {
-      size[d] = img.dimension(d);
-    }
-
-    RealRandomAccessible<T>
-        interpolated = Views.interpolate(Views.expandBorder(img, size), interpolatorFactory);
-
-    double[] scaling = new double[img.numDimensions()];
-    for (int d = 0 ; d < 2; d++) {
-      scaling[d] = factor;
-    }
-    if (img.numDimensions() > 2) {
-      scaling[2] = 1.0;
-    }
-
-    RealRandomAccessible scaled = RealViews.affine(interpolated, new Scale(scaling));
-
-    RandomAccessible sampled = Views.raster(scaled);
-
-    long[] newSize = new long[img.numDimensions() * 2];
-    for (int d = 0; d < 2; d++) {
-      newSize[d+img.numDimensions()] = (long)(img.dimension(d) * factor);
-    }
-    if (img.numDimensions() > 2) {
-      newSize[2 + img.numDimensions()] = img.dimension(2);
-    }
-
-    return Views.interval(sampled, Intervals.createMinSize(newSize));
-
-  }
 }
