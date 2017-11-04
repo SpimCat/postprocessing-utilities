@@ -27,7 +27,7 @@ import org.scijava.ui.UIService;
 public class StandardDeviationPerPixelMeasurement<T extends RealType<T>> implements
                                                                          Command
 {
-  @Parameter private Img<T> image;
+  @Parameter private RandomAccessibleInterval<T> image;
 
   @Parameter private int radius;
 
