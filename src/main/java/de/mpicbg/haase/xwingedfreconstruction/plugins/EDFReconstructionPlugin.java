@@ -26,8 +26,8 @@ import org.scijava.ui.UIService;
  * November 2017
  */
 
-@Plugin(type = Command.class, menuPath = "XWing>Reconstruction>EDF reconstruction")
-public class EDFReconstruction<T extends RealType<T>> implements Command
+@Plugin(type = Command.class, menuPath = "XWing>Internal>EDF reconstruction")
+public class EDFReconstructionPlugin<T extends RealType<T>> implements Command
 {
   @Parameter private Img<T> input;
 
@@ -51,24 +51,24 @@ public class EDFReconstruction<T extends RealType<T>> implements Command
     RandomAccessibleInterval<FloatType> maxProjection = maxProjector.getMaxProjection();
 
     Img<UnsignedShortType> zMap = maxProjector.getArgMaxProjection();
-    uiService.show("max", maxProjection);
-    uiService.show("argMax", zMap);
+    //uiService.show("max", maxProjection);
+    //uiService.show("argMax", zMap);
 
     RandomAccessibleInterval upsampledMaxProjection = sample(maxProjection, 1.0 / samplingFactor);
     RandomAccessibleInterval upsampledZMap = sample(zMap, 1.0 / samplingFactor);
-    uiService.show("upsampled argMax", upsampledMaxProjection);
-    uiService.show("upsampled argMax", upsampledZMap);
+    //uiService.show("upsampled argMax", upsampledMaxProjection);
+    //uiService.show("upsampled argMax", upsampledZMap);
 
     ZMapProjection
         zMapProjector = new ZMapProjection(input, upsampledZMap);
     RandomAccessibleInterval edfProjection =  zMapProjector.getProjection();
-    uiService.show("projection", edfProjection);
+    //uiService.show("projection", edfProjection);
 
     Average average = new Average(maxProjection);
     StandardDeviation
         standardDeviation = new StandardDeviation(maxProjection, average);
 
-    double threshold = average.getAverage();// + standardDeviation.getStandardDevation() * 2;
+    double threshold = 0; //average.getAverage();// + standardDeviation.getStandardDevation() * 2;
 
     System.out.println("Threshold: " + threshold);
 
@@ -76,7 +76,7 @@ public class EDFReconstruction<T extends RealType<T>> implements Command
         thresholder = new ThresholdImage(upsampledMaxProjection, threshold);
     RandomAccessibleInterval goodRegion = thresholder.getBinary();
 
-    uiService.show("good region", goodRegion);
+    //uiService.show("good region", goodRegion);
 
     PixelwiseImageProduct
         pixelwiseImageProduct = new PixelwiseImageProduct(edfProjection, goodRegion);

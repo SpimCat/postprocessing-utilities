@@ -1,10 +1,13 @@
 package de.mpicbg.haase.xwingedfreconstruction;
 
-import de.mpicbg.haase.xwingedfreconstruction.plugins.EDFReconstruction;
+import de.mpicbg.haase.xwingedfreconstruction.plugins.ArgMaxProjectionPlugin;
+import de.mpicbg.haase.xwingedfreconstruction.plugins.BestFocusProjectionPlugin;
+import de.mpicbg.haase.xwingedfreconstruction.plugins.EDFReconstructionPlugin;
 import net.imagej.Dataset;
 import net.imagej.ImageJ;
 import net.imglib2.img.Img;
 import net.imglib2.type.numeric.integer.UnsignedShortType;
+import org.scijava.plugin.Parameter;
 
 public class Demo
 {
@@ -23,13 +26,28 @@ public class Demo
 
     Img<UnsignedShortType> input = (Img)dataset;
 
-    Object[] parameters = new Object[]{
+
+
+    Object[] parameters1 = new Object[]{
+        "input", input
+    };
+    ij.command().run(BestFocusProjectionPlugin.class, true, parameters1);
+
+
+    Object[] parameters2 = new Object[]{
+        "input", input,
+        "showMaxProjection", true,
+        "showArgMaxProjection", false
+    };
+    ij.command().run(ArgMaxProjectionPlugin.class, true, parameters2);
+
+
+    Object[] parameters3 = new Object[]{
         "input", input,
         "focusedRegionRadius", focusedRegionRadius,
         "samplingFactor", downScalingFactor
     };
-
-    ij.command().run(EDFReconstruction.class, true, parameters);
+    ij.command().run(EDFReconstructionPlugin.class, true, parameters3);
   }
 
 

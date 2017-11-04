@@ -18,7 +18,7 @@ public class ArgMaxProjectionPlugin<T extends RealType<T>> implements Command
 {
 
 
-  @Parameter private Img<T> image;
+  @Parameter private Img<T> input;
 
   @Parameter private UIService uiService;
 
@@ -27,11 +27,12 @@ public class ArgMaxProjectionPlugin<T extends RealType<T>> implements Command
 
   @Override public void run()
   {
-    ArgMaxProjection<T> argMaxProjection = new ArgMaxProjection<T>(image);
+    ArgMaxProjection<T> argMaxProjection = new ArgMaxProjection<T>(
+        input);
     if (showArgMaxProjection) {
       uiService.show("ArgMax ", argMaxProjection.getArgMaxProjection());
     }
-    if (showArgMaxProjection) {
+    if (showMaxProjection) {
       uiService.show("Max ", argMaxProjection.getMaxProjection());
     }
   }

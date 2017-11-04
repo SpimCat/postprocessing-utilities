@@ -13,22 +13,25 @@ import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.ui.UIService;
 
-@Plugin(type = Command.class)
-public class StandardDeviationPerSliceMeasurement<T extends RealType<T>> implements Command
+import java.util.Arrays;
+
+public class StandardDeviationPerSliceMeasurement<T extends RealType<T>>
 {
-  private ClearCLContext mContext;
+  private RandomAccessibleInterval<T> image;
+  double[] standardDeviationPerSlice = null;
 
-  @Parameter private Img<T> image;
+  public StandardDeviationPerSliceMeasurement(RandomAccessibleInterval<T> image) {
+    this.image = image;
+  }
 
-  @Parameter private UIService uiService;
-
-  @Override public void run()
+  private synchronized void process()
   {
+    if (standardDeviationPerSlice != null) {
+      return;
+    }
     System.out.println("Size " + image.dimension(2));
     int numberOfSlices = (int)image.dimension(2);
-    double[] standardDeviationPerSlice = new double[numberOfSlices];
-
-
+    standardDeviationPerSlice = new double[numberOfSlices];
 
     for (int z = 0; z < numberOfSlices; z++)
     {
@@ -41,12 +44,10 @@ public class StandardDeviationPerSliceMeasurement<T extends RealType<T>> impleme
     System.out.println("Shown images");
   }
 
-  private void fillImage(Img<UnsignedShortType> img, int value) {
-    Cursor<UnsignedShortType> cursor = img.cursor();
-    while(cursor.hasNext()) {
-      cursor.next().set(value);
-    }
+  public double[] getStandardDeviationPerSlice() {
+    process();
+
+    return standardDeviationPerSlice;
+
   }
-
-
 }
