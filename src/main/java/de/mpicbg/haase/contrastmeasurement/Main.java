@@ -36,15 +36,16 @@ public class Main
 
     RandomAccessibleInterval downScaledImg = ij.op().transform().scale(img, new double[] { 0.25, 0.25, 1}, interpolatorFactory);
 
+    int radius = 5;
 
+//    Object[]
+//        imglibParameters =
+//        new Object[] { "radius", radius,
+//                       "image", downScaledImg};
+//
+//    ij.command().run(StandardDeviationPerSliceMeasurement.class, true, imglibParameters);
 
-    Object[]
-        imglibParameters =
-        new Object[] { "radius", 5,
-                       "image", downScaledImg};
-
-    //ij.command().run(StandardDeviationPerSliceMeasurement.class, true, imglibParameters);
-    Img<FloatType> stdDevImage = (Img<FloatType>) ij.command().run(StandardDeviationPerPixelMeasurement.class, true, imglibParameters);
+    Img<FloatType> stdDevImage = StandardDeviationPerPixelMeasurement.process(downScaledImg, radius);
 
     System.out.println("Bye!");
 

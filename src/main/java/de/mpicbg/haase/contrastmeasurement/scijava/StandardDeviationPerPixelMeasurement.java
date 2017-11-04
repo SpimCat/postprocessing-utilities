@@ -37,10 +37,17 @@ public class StandardDeviationPerPixelMeasurement<T extends RealType<T>> impleme
 
   @Override public void run()
   {
+    Img<FloatType> result = process(image, radius);
+    uiService.show("stddev", stdDevImg);
+
+    System.out.println("Bye.");
+  }
+
+  public static <T extends RealType<T>> Img<FloatType> process(RandomAccessibleInterval<T> image, int radius) {
     System.out.println("Size " + image.dimension(0) + "/" + image.dimension(1) + "/" + image.dimension(2));
     int numberOfSlices = (int) image.dimension(2);
 
-        stdDevImg =
+    Img<FloatType> stdDevImg =
         PlanarImgs.floats(new long[] { image.dimension(0),
                                        image.dimension(1),
                                        image.dimension(2) });
@@ -83,8 +90,6 @@ public class StandardDeviationPerPixelMeasurement<T extends RealType<T>> impleme
         raStdDev.get().setReal(stdDev);
       }
     }
-    uiService.show("stddev", stdDevImg);
-
-    System.out.println("Bye.");
+    return stdDevImg;
   }
 }
