@@ -43,7 +43,7 @@ public class DCTS2DImglib2<T extends RealType<T>>
 
     double[] array = new double[(int)(image.dimension(0) * image.dimension(1))];
     if (image.numDimensions() == 2) {
-      dcts2d = new double[] {entropyOfSlice(image, array, lDCTForWidthAndHeight, pWidth, pHeight, pPSFSupportRadius)};
+      dcts2d = new double[] {entropyOfSlice(Views.iterable(image).localizingCursor(), array, lDCTForWidthAndHeight, pWidth, pHeight, pPSFSupportRadius)};
     }
     else
     {
@@ -55,16 +55,16 @@ public class DCTS2DImglib2<T extends RealType<T>>
         RandomAccessibleInterval<T>
             slice = Views.hyperSlice(image, 2, z);
 
-        dcts2d[z] = entropyOfSlice(slice, array, lDCTForWidthAndHeight, pWidth, pHeight, pPSFSupportRadius);
+        dcts2d[z] = entropyOfSlice(Views.iterable(slice).localizingCursor(), array, lDCTForWidthAndHeight, pWidth, pHeight, pPSFSupportRadius);
       }
     }
     System.out.println("Shown images");
   }
 
-  private double entropyOfSlice(RandomAccessibleInterval<T> slice, double[] array, DoubleDCT_2D lDCTForWidthAndHeight, int pWidth, int pHeight, int pPSFSupportRadius) {
+  public static <T extends RealType<T>> double entropyOfSlice(Cursor<T> cursor, double[] array, DoubleDCT_2D lDCTForWidthAndHeight, int pWidth, int pHeight, int pPSFSupportRadius) {
 
     // todo: the order of how we get the pixels is not garanteed. it may be better to go through the image with a random access
-    Cursor<T> cursor = Views.iterable(slice).cursor();
+
     int count = 0;
     while (cursor.hasNext())
     {
@@ -95,7 +95,7 @@ public class DCTS2DImglib2<T extends RealType<T>>
   }
 
 
-  private void normalizeL2(double[] pDoubleLargeArray)
+  private static void normalizeL2(double[] pDoubleLargeArray)
   {
     final double lL2 = computeL2(pDoubleLargeArray);
     final double lIL2 = 1.0 / lL2;
@@ -108,7 +108,7 @@ public class DCTS2DImglib2<T extends RealType<T>>
     }
   }
 
-  private double computeL2(double[] pDoubleLargeArray)
+  private static double computeL2(double[] pDoubleLargeArray)
   {
     final long lLength = pDoubleLargeArray.length;
 
@@ -123,7 +123,7 @@ public class DCTS2DImglib2<T extends RealType<T>>
   }
 
 
-  private final double entropyPerPixelSubTriangle(double[] pDoubleLargeArray,
+  private static final double entropyPerPixelSubTriangle(double[] pDoubleLargeArray,
                                                   final int pWidth,
                                                   final int pHeight,
                                                   final int xl,
@@ -144,7 +144,7 @@ public class DCTS2DImglib2<T extends RealType<T>>
     return entropy;
   }
 
-  private double entropySub(double[] pDoubleLargeArray,
+  private static double entropySub(double[] pDoubleLargeArray,
                             final int xl,
                             final double entropy,
                             final int yi,
