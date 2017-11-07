@@ -5,6 +5,7 @@ import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.algorithm.neighborhood.Neighborhood;
 import net.imglib2.algorithm.neighborhood.RectangleShape;
 import net.imglib2.img.Img;
+import net.imglib2.img.display.imagej.ImageJFunctions;
 import net.imglib2.img.planar.PlanarImgs;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.FloatType;
@@ -19,13 +20,13 @@ import org.scijava.ui.UIService;
  * Author: Robert Haase (http://haesleinhuepf.net) at MPI CBG (http://mpi-cbg.de)
  * November 2017
  */
-@Plugin(type = Command.class, menuPath = "XWing>Internal>Standard deviation")
+@Plugin(type = Command.class, menuPath = "XWing>Internal>Standard deviation 2D slice by slice")
 public class StandardDeviationPerPixelMeasurement<T extends RealType<T>> implements
                                                                          Command
 {
   @Parameter private RandomAccessibleInterval<T> image;
 
-  @Parameter private int radius;
+  @Parameter private int radius = 3;
 
   @Parameter private UIService uiService;
 
@@ -33,8 +34,9 @@ public class StandardDeviationPerPixelMeasurement<T extends RealType<T>> impleme
 
   @Override public void run()
   {
-    Img<FloatType> result = process(image, radius);
+    stdDevImg = process(image, radius);
     uiService.show("stddev", stdDevImg);
+    //ImageJFunctions.show(localEntropyImg);
 
     System.out.println("Bye.");
   }
