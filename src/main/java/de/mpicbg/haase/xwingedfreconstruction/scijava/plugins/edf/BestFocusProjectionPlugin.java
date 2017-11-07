@@ -1,7 +1,6 @@
-package de.mpicbg.haase.xwingedfreconstruction.plugins;
+package de.mpicbg.haase.xwingedfreconstruction.scijava.plugins.edf;
 
-import de.mpicbg.haase.xwingedfreconstruction.scijava.DCTS2DImglib2;
-import de.mpicbg.haase.xwingedfreconstruction.scijava.StandardDeviationPerSliceMeasurement;
+import de.mpicbg.haase.xwingedfreconstruction.scijava.plugins.internal.DCTS22PerSlice;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.Img;
 import net.imglib2.type.numeric.RealType;
@@ -16,7 +15,7 @@ import org.scijava.ui.UIService;
  * November 2017
  */
 
-@Plugin(type = Command.class, menuPath = "XWing>Internal>Best focused slice")
+@Plugin(type = Command.class, menuPath = "XWing>EDF>Best (max DCTS2D) focused slice")
 public class BestFocusProjectionPlugin<T extends RealType<T>> implements Command
 {
   @Parameter private Img<T> input;
@@ -24,11 +23,7 @@ public class BestFocusProjectionPlugin<T extends RealType<T>> implements Command
 
   @Override public void run()
   {
-    /*StandardDeviationPerSliceMeasurement standardDeviationPerSliceMeasurement = new StandardDeviationPerSliceMeasurement(input);
-
-    double[] stdDevs = standardDeviationPerSliceMeasurement.getStandardDeviationPerSlice();
-*/
-    double[] stdDevs = new DCTS2DImglib2(input).getDcts2d();
+    double[] stdDevs = new DCTS22PerSlice(input).getDcts2d();
 
     double max = stdDevs[0];
     long argMax = 0;

@@ -1,8 +1,8 @@
 package de.mpicbg.haase.xwingedfreconstruction;
 
-import de.mpicbg.haase.xwingedfreconstruction.plugins.ArgMaxProjectionPlugin;
-import de.mpicbg.haase.xwingedfreconstruction.plugins.BestFocusProjectionPlugin;
-import de.mpicbg.haase.xwingedfreconstruction.plugins.MaxStandardDeviationProjectionPlugin;
+import de.mpicbg.haase.xwingedfreconstruction.scijava.plugins.internal.ArgMaxProjectionPlugin;
+import de.mpicbg.haase.xwingedfreconstruction.scijava.plugins.edf.BestFocusProjectionPlugin;
+import de.mpicbg.haase.xwingedfreconstruction.scijava.plugins.edf.MaxStandardDeviationProjectionPlugin;
 import net.imagej.Dataset;
 import net.imagej.ImageJ;
 import net.imglib2.img.Img;

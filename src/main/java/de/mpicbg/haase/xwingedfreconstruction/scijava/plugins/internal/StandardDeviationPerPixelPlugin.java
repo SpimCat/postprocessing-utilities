@@ -1,4 +1,4 @@
-package de.mpicbg.haase.xwingedfreconstruction.scijava;
+package de.mpicbg.haase.xwingedfreconstruction.scijava.plugins.internal;
 
 import net.imglib2.RandomAccess;
 import net.imglib2.RandomAccessibleInterval;
@@ -21,7 +21,7 @@ import org.scijava.ui.UIService;
  * November 2017
  */
 @Plugin(type = Command.class, menuPath = "XWing>Internal>Standard deviation 2D slice by slice")
-public class StandardDeviationPerPixelMeasurement<T extends RealType<T>> implements
+public class StandardDeviationPerPixelPlugin<T extends RealType<T>> implements
                                                                          Command
 {
   @Parameter private RandomAccessibleInterval<T> image;

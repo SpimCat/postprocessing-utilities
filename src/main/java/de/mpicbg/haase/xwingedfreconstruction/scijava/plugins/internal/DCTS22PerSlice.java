@@ -1,4 +1,4 @@
-package de.mpicbg.haase.xwingedfreconstruction.scijava;
+package de.mpicbg.haase.xwingedfreconstruction.scijava.plugins.internal;
 
 import clearcontrol.ip.iqm.DCTS2D;
 import clearcontrol.stack.OffHeapPlanarStack;
@@ -17,12 +17,12 @@ import static java.lang.Math.sqrt;
  * Author: Robert Haase (http://haesleinhuepf.net) at MPI CBG (http://mpi-cbg.de)
  * November 2017
  */
-public class DCTS2DImglib2<T extends RealType<T>>
+public class DCTS22PerSlice<T extends RealType<T>>
 {
   private RandomAccessibleInterval<T> image;
   double[] dcts2d = null;
 
-  public DCTS2DImglib2(RandomAccessibleInterval<T> image) {
+  public DCTS22PerSlice(RandomAccessibleInterval<T> image) {
     this.image = image;
   }
 

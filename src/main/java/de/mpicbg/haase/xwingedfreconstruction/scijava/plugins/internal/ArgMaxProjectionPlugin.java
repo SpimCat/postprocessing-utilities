@@ -1,6 +1,5 @@
-package de.mpicbg.haase.xwingedfreconstruction.plugins;
+package de.mpicbg.haase.xwingedfreconstruction.scijava.plugins.internal;
 
-import de.mpicbg.haase.xwingedfreconstruction.scijava.ArgMaxProjection;
 import net.imglib2.img.Img;
 import net.imglib2.type.numeric.RealType;
 import org.scijava.command.Command;

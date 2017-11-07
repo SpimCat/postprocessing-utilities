@@ -1,4 +1,4 @@
-package de.mpicbg.haase.xwingedfreconstruction.scijava;
+package de.mpicbg.haase.xwingedfreconstruction.scijava.plugins.internal;
 
 import net.imglib2.Cursor;
 import net.imglib2.RandomAccess;

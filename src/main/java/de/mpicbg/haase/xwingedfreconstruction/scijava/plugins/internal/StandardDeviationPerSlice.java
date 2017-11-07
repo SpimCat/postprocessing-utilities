@@ -1,4 +1,4 @@
-package de.mpicbg.haase.xwingedfreconstruction.scijava;
+package de.mpicbg.haase.xwingedfreconstruction.scijava.plugins.internal;
 
 import de.mpicbg.haase.xwingedfreconstruction.scijava.statistics.StandardDeviation;
 import net.imglib2.Cursor;
@@ -14,12 +14,12 @@ import org.scijava.ui.UIService;
 
 import java.util.Arrays;
 
-public class StandardDeviationPerSliceMeasurement<T extends RealType<T>>
+public class StandardDeviationPerSlice<T extends RealType<T>>
 {
   private RandomAccessibleInterval<T> image;
   double[] standardDeviationPerSlice = null;
 
-  public StandardDeviationPerSliceMeasurement(RandomAccessibleInterval<T> image) {
+  public StandardDeviationPerSlice(RandomAccessibleInterval<T> image) {
     this.image = image;
   }
 
