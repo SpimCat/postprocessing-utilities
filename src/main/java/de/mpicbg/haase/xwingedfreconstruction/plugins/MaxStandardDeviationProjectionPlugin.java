@@ -26,15 +26,15 @@ import org.scijava.ui.UIService;
  * November 2017
  */
 
-@Plugin(type = Command.class, menuPath = "XWing>Internal>EDF reconstruction")
-public class EDFReconstructionPlugin<T extends RealType<T>> implements Command
+@Plugin(type = Command.class, menuPath = "XWing>EDF>Max Standard Deviation projection")
+public class MaxStandardDeviationProjectionPlugin<T extends RealType<T>> implements Command
 {
   @Parameter private Img<T> input;
 
   @Parameter private UIService uiService;
 
   @Parameter private int focusedRegionRadius = 5;
-  @Parameter private double samplingFactor = 0.125;
+  @Parameter private double samplingFactor = 0.5;
 
   @Override public void run()
   {
@@ -70,7 +70,7 @@ public class EDFReconstructionPlugin<T extends RealType<T>> implements Command
 
     double threshold = 0; //average.getAverage();// + standardDeviation.getStandardDevation() * 2;
 
-    System.out.println("Threshold: " + threshold);
+    //System.out.println("Threshold: " + threshold);
 
     ThresholdImage
         thresholder = new ThresholdImage(upsampledMaxProjection, threshold);
