@@ -2,12 +2,11 @@ package de.mpicbg.haase.xwingedfreconstruction;
 
 import de.mpicbg.haase.xwingedfreconstruction.plugins.ArgMaxProjectionPlugin;
 import de.mpicbg.haase.xwingedfreconstruction.plugins.BestFocusProjectionPlugin;
-import de.mpicbg.haase.xwingedfreconstruction.plugins.EDFReconstructionPlugin;
+import de.mpicbg.haase.xwingedfreconstruction.plugins.MaxStandardDeviationProjectionPlugin;
 import net.imagej.Dataset;
 import net.imagej.ImageJ;
 import net.imglib2.img.Img;
 import net.imglib2.type.numeric.integer.UnsignedShortType;
-import org.scijava.plugin.Parameter;
 
 public class Demo
 {
@@ -52,7 +51,7 @@ public class Demo
         "focusedRegionRadius", focusedRegionRadius,
         "samplingFactor", downScalingFactor
     };
-    ij.command().run(EDFReconstructionPlugin.class, true, parameters3);
+    ij.command().run(MaxStandardDeviationProjectionPlugin.class, true, parameters3);
   }
 
 
