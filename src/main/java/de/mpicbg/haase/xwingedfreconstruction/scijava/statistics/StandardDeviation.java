@@ -1,6 +1,7 @@
 package de.mpicbg.haase.xwingedfreconstruction.scijava.statistics;
 
 import net.imglib2.Cursor;
+import net.imglib2.IterableInterval;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.view.Views;
@@ -11,17 +12,17 @@ import net.imglib2.view.Views;
  */
 public class StandardDeviation<T extends RealType<T>>
 {
-  private RandomAccessibleInterval<T> image;
+  private IterableInterval<T> image;
   private Average<T> average;
 
   boolean resultValid = false;
   double standardDeviation;
 
-  public StandardDeviation(RandomAccessibleInterval<T> image) {
+  public StandardDeviation(IterableInterval<T> image) {
     this.image = image;
     this.average = new Average<T>(image);
   }
-  public StandardDeviation(RandomAccessibleInterval<T> image, Average<T> average)
+  public StandardDeviation(IterableInterval<T> image, Average<T> average)
   {
     this.image = image;
     this.average = average;
@@ -30,7 +31,7 @@ public class StandardDeviation<T extends RealType<T>>
     if (resultValid) {
       return;
     }
-    Cursor<T> cursor = Views.iterable(image).localizingCursor();
+    Cursor<T> cursor = (image).localizingCursor();
     double mean = average.getAverage();
     long count = average.getCount();
 

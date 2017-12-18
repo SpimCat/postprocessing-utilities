@@ -87,6 +87,7 @@
 			<id>imagej.public</id>
 			<url>http://maven.imagej.net/content/groups/public</url>
 		</repository>
+
 	</repositories>
 
 	<dependencies>
@@ -109,18 +110,6 @@
 		<dependency>
 			<groupId>net.imglib2</groupId>
 			<artifactId>imglib2-ij</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>net.clearvolume</groupId>
-			<artifactId>ClearCL</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>net.clearcontrol</groupId>
-			<artifactId>ClearControl</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>net.haesleinhuepf</groupId>
-			<artifactId>ClearUtilities</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.github.wendykierp</groupId>

@@ -1,15 +1,10 @@
 package de.mpicbg.haase.xwingedfreconstruction.scijava.plugins.internal;
 
-import clearcontrol.ip.iqm.DCTS2D;
-import clearcontrol.stack.OffHeapPlanarStack;
-import de.mpicbg.haase.xwingedfreconstruction.scijava.statistics.StandardDeviation;
-import net.haesleinhuepf.clearcl.utilities.ClearCLImageImgConverter;
 import net.imglib2.Cursor;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.view.Views;
 import org.jtransforms.dct.DoubleDCT_2D;
-import pl.edu.icm.jlargearrays.DoubleLargeArray;
 
 import static java.lang.Math.sqrt;
 

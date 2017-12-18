@@ -1,6 +1,7 @@
 package de.mpicbg.haase.xwingedfreconstruction.scijava.statistics;
 
 import net.imglib2.Cursor;
+import net.imglib2.IterableInterval;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.view.Views;
@@ -11,13 +12,13 @@ import net.imglib2.view.Views;
  */
 public class Average<T extends RealType<T>>
 {
-  private RandomAccessibleInterval<T> image;
+  private IterableInterval<T> image;
 
   private long count;
   private double mean;
   private boolean resultValid = false;
 
-  public Average(RandomAccessibleInterval<T> image) {
+  public Average(IterableInterval<T> image) {
     this.image = image;
   }
 
@@ -25,7 +26,7 @@ public class Average<T extends RealType<T>>
     if (resultValid) {
       return;
     }
-    Cursor<T> cursor = Views.iterable(image).localizingCursor();
+    Cursor<T> cursor = image.localizingCursor();
 
     double sum = 0;
     count = 0;

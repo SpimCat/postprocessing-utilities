@@ -37,7 +37,7 @@ public class StandardDeviationPerSlice<T extends RealType<T>>
       RandomAccessibleInterval<T>
           slice = Views.hyperSlice(image, 2, z);
 
-      double stdDev = new StandardDeviation<T>(slice).getStandardDevation();
+      double stdDev = new StandardDeviation<T>(Views.iterable(slice)).getStandardDevation();
       standardDeviationPerSlice[z] = stdDev;
     }
     System.out.println("Shown images");

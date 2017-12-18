@@ -20,7 +20,7 @@ import org.scijava.ui.UIService;
  * Author: Robert Haase (http://haesleinhuepf.net) at MPI CBG (http://mpi-cbg.de)
  * November 2017
  */
-@Plugin(type = Command.class, menuPath = "XWing>Internal>Standard deviation 2D slice by slice")
+@Plugin(type = Command.class, menuPath = "XWing>Internal (experimental)>Standard deviation 2D slice by slice")
 public class StandardDeviationPerPixelPlugin<T extends RealType<T>> implements
                                                                          Command
 {

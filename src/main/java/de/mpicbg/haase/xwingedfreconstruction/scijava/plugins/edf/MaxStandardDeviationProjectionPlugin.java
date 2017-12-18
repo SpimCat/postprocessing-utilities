@@ -14,7 +14,7 @@ import org.scijava.plugin.Plugin;
  * November 2017
  */
 
-@Plugin(type = Command.class, menuPath = "XWing>EDF>Max Standard Deviation projection")
+@Plugin(type = Command.class, menuPath = "XWing>EDF projection>Max Standard Deviation projection")
 public class MaxStandardDeviationProjectionPlugin<T extends RealType<T>> extends
                                                                        AbstractMaxProjectionPlugin<T> implements
                                                                                                                                                                                                 Command

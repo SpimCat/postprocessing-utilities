@@ -16,7 +16,7 @@ import java.util.Arrays;
  * November 2017
  */
 @Deprecated
-@Plugin(type = Command.class, menuPath = "XWing>Internal>DCTS2D entropy slice by slice")
+//@Plugin(type = Command.class, menuPath = "XWing>Internal (experimental)>DCTS2D entropy slice by slice")
 public class DCTS2DPerSlicePlugin<T extends RealType<T>> implements Command
 {
   @Parameter private Img<T> input;

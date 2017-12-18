@@ -12,6 +12,7 @@ import net.imglib2.img.Img;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.integer.UnsignedShortType;
 import net.imglib2.type.numeric.real.FloatType;
+import net.imglib2.view.Views;
 
 /**
  * Author: Robert Haase (http://haesleinhuepf.net) at MPI CBG (http://mpi-cbg.de)
@@ -42,9 +43,9 @@ public class AbstractMaxProjectionPlugin<T extends RealType<T>>
     RandomAccessibleInterval edfProjection =  zMapProjector.getProjection();
     //uiService.show("projection", edfProjection);
 
-    Average average = new Average(maxProjection);
+    Average average = new Average(Views.iterable(maxProjection));
     StandardDeviation
-        standardDeviation = new StandardDeviation(maxProjection, average);
+        standardDeviation = new StandardDeviation(Views.iterable(maxProjection), average);
 
     double threshold = 0; //average.getAverage();// + standardDeviation.getStandardDevation() * 2;
 

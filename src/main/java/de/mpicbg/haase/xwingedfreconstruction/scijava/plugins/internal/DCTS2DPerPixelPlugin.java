@@ -24,7 +24,7 @@ import org.scijava.ui.UIService;
  * November 2017
  */
 
-@Plugin(type = Command.class, menuPath = "XWing>Internal>DCTS2D slice by slice")
+@Plugin(type = Command.class, menuPath = "XWing>Internal (experimental)>Local DCTS2D Map slice by slice")
 public class DCTS2DPerPixelPlugin<T extends RealType<T>> implements
         Command {
     @Parameter
