@@ -56,47 +56,50 @@ public class AnalyseMeanQualityInDepthOverTimePlugin implements Command {
     @Override
     public void run() {
 
+        Double[][] measurements = new Double[imagePlus.getNSlices()][];
         for (int z = 0; z < imagePlus.getNSlices(); z++) {
             System.out.println("z: " + z);
 
-            Img<FloatType> image = ImageJFunctions.convertFloat(new Duplicator().run(imagePlus, z+1, z+1));
-            Img<FloatType> qualityImage = ImageJFunctions.convertFloat(new Duplicator().run(qualityImagePlus, z+1, z+1));
+            Img<FloatType> image = ImageJFunctions.convertFloat(new Duplicator().run(imagePlus, z + 1, z + 1));
+            Img<FloatType> qualityImage = ImageJFunctions.convertFloat(new Duplicator().run(qualityImagePlus, z + 1, z + 1));
 
             AverageInDepthCalculator<FloatType> averageInDepthCalculator = new AverageInDepthCalculator<FloatType>(image, qualityImage, ops);
             averageInDepthCalculator.setMinDepthInPixels(minDepthInPixels);
             averageInDepthCalculator.setMaxDepthInPixels(maxDepthInPixels);
             averageInDepthCalculator.setDepthStep(depthStep);
 
-
-            Double[] measurements = averageInDepthCalculator.getMeasurements();
-
-            ResultsTable resultsTable = ResultsTable.getResultsTable();
-            for (int i = 0; i < measurements.length; i++) {
-                resultsTable.incrementCounter();
-                if (z == 0) {
-                    resultsTable.addValue("Min_depth", minDepthInPixels + i * depthStep);
-                    resultsTable.addValue("Max_depth", minDepthInPixels + (i + 1) * depthStep);
-                }
-                resultsTable.addValue("Average_" + z, measurements[i]);
-            }
-            resultsTable.show("Results");
-
-
-            /*
-            try {
-                commandService.run(AnalyseMeanQualityInDepthPlugin.class, true, new Object[]{
-                        "imagePlus", imp,
-                        "minDepthInPixels", minDepthInPixels,
-                        "maxDepthInPixels", maxDepthInPixels,
-                        "depthStep", depthStep
-                }).get();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            }*/
-
+            measurements[z] = averageInDepthCalculator.getMeasurements();
         }
+
+        ResultsTable resultsTable = ResultsTable.getResultsTable();
+        for (int i = 0; i < measurements[0].length; i++) {
+            resultsTable.incrementCounter();
+            resultsTable.addValue("Min_depth", minDepthInPixels + i * depthStep);
+            resultsTable.addValue("Max_depth", minDepthInPixels + (i + 1) * depthStep);
+
+            for (int z = 0; z < imagePlus.getNSlices(); z++) {
+                resultsTable.addValue("Average_" + z, measurements[z][i]);
+            }
+        }
+        resultsTable.show("Results");
+
+
+
+        /*
+        try {
+            commandService.run(AnalyseMeanQualityInDepthPlugin.class, true, new Object[]{
+                    "imagePlus", imp,
+                    "minDepthInPixels", minDepthInPixels,
+                    "maxDepthInPixels", maxDepthInPixels,
+                    "depthStep", depthStep
+            }).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }*/
+
+
 
     }
 
