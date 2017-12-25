@@ -6,19 +6,19 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>net.haesleinhuepf</groupId>
-		<artifactId>ClearSciJavaPom</artifactId>
-		<version>0.5.0</version>
+		<groupId>org.scijava</groupId>
+		<artifactId>pom-scijava</artifactId>
+		<version>17.2.0</version>
 		<relativePath />
 	</parent>
 
-	<groupId>de.mpicbg.haase</groupId>
-	<artifactId>XWingEDFReconstruction</artifactId>
+	<groupId>de.mpicbg.rhaase</groupId>
+	<artifactId>spimcat-postprocessing-utilities</artifactId>
 	<version>0.1.0-SNAPSHOT</version>
 
-	<name>XWingEDFReconstruction</name>
-	<description>XWingEDFReconstruction</description>
-	<url>https://github.com/haesleinhuepf/XWingEDFReconstruction</url>
+	<name>spimcat-postprocessing-utilities</name>
+	<description>spimcat-postprocessing-utilities</description>
+	<url>https://github.com/SpimCat/postprocessing-utilities</url>
 	<inceptionYear>2017</inceptionYear>
 	<organization>
 		<name>MPI CBG</name>
@@ -61,14 +61,14 @@
 	</mailingLists>
 
 	<scm>
-		<connection>scm:git:git://github.com/haesleinhuepf/XWingEDFReconstruction</connection>
-        <developerConnection>scm:git:git@github.com/haesleinhuepf/XWingEDFReconstruction</developerConnection>
+		<connection>scm:git:git://github.com/SpimCat/postprocessing-utilities</connection>
+        <developerConnection>scm:git:git@github.com/SpimCat/postprocessing-utilities</developerConnection>
         <tag>HEAD</tag>
-		<url>https://github.com/haesleinhuepf/contrast_measurement</url>
+		<url>https://github.com/SpimCat/postprocessing-utilities</url>
 	</scm>
 	<issueManagement>
 		<system>GitHub Issues</system>
-		<url>https://github.com/haesleinhuepf/contrast_measurement/issues</url>
+		<url>https://github.com/SpimCat/postprocessing-utilities/issues</url>
 	</issueManagement>
 	<ciManagement>
 		<system>None</system>
@@ -76,7 +76,6 @@
 
 	<properties>
 		<package-name>de.mpicbg.haase</package-name>
-		<main-class>de.mpicbg.haase.xwingedfreconstruction.Demo</main-class>
 		<license.licenseName>bsd_3</license.licenseName>
 		<license.copyrightOwners>Robert Haase</license.copyrightOwners>
 		<imagej.app.directory>C:/Programs/Fiji.app/</imagej.app.directory>
