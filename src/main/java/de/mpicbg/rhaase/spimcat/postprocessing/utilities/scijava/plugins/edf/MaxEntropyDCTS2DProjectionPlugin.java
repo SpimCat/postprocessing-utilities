@@ -1,6 +1,5 @@
 package de.mpicbg.rhaase.spimcat.postprocessing.utilities.scijava.plugins.edf;
 
-import de.mpicbg.haase.xwingedfreconstruction.scijava.plugins.internal.*;
 import de.mpicbg.rhaase.spimcat.postprocessing.utilities.scijava.plugins.internal.DCTS2DPerPixelPlugin;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.Img;
