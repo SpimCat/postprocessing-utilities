@@ -1,7 +1,11 @@
 package de.mpicbg.rhaase.spimcat.postprocessing.fijiplugins.projection;
 
+<<<<<<< HEAD:src/main/java/de/mpicbg/rhaase/spimcat/postprocessing/fijiplugins/projection/MaxEntropyDCTS2DProjectionPlugin.java
 import de.mpicbg.haase.xwingedfreconstruction.scijava.plugins.internal.*;
 import de.mpicbg.rhaase.spimcat.postprocessing.fijiplugins.deprecated.DCTS2DPerPixelPlugin;
+=======
+import de.mpicbg.rhaase.spimcat.postprocessing.utilities.scijava.plugins.internal.DCTS2DPerPixelPlugin;
+>>>>>>> origin/master:src/main/java/de/mpicbg/rhaase/spimcat/postprocessing/utilities/scijava/plugins/edf/MaxEntropyDCTS2DProjectionPlugin.java
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.Img;
 import net.imglib2.type.numeric.RealType;

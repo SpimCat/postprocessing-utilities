@@ -13,11 +13,11 @@
 	</parent>
 
 	<groupId>de.mpicbg.rhaase</groupId>
-	<artifactId>spimcat-postprocessing-utilities</artifactId>
-	<version>0.1.0-SNAPSHOT</version>
+	<artifactId>postprocessing-utilities</artifactId>
+	<version>0.1.1</version>
 
-	<name>spimcat-postprocessing-utilities</name>
-	<description>spimcat-postprocessing-utilities</description>
+	<name>postprocessing-utilities</name>
+	<description>postprocessing-utilities</description>
 	<url>https://github.com/SpimCat/postprocessing-utilities</url>
 	<inceptionYear>2017</inceptionYear>
 	<organization>
@@ -112,9 +112,21 @@
 		</dependency>
 		<dependency>
 			<groupId>com.github.wendykierp</groupId>
-			<artifactId>JTransforms</artifactId>
+			<artifactId>jtransforms</artifactId>
 			<version>3.1.2-RH</version>
 		</dependency>
 	</dependencies>
+
+
+
+	<distributionManagement>
+
+		<repository>
+			<id>bintray-haesleinhuepf-snapshots</id>
+			<name>bintray-snapshots</name>
+			<url>https://api.bintray.com/maven/haesleinhuepf/snapshots/postprocessing-utilities/;publish=1</url>
+		</repository>
+
+	</distributionManagement>
 
 </project>
