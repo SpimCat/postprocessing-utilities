@@ -14,7 +14,7 @@ import org.scijava.plugin.Plugin;
  * Author: Robert Haase (http://haesleinhuepf.net) at MPI CBG (http://mpi-cbg.de)
  * November 2017
  */
-
+@Deprecated
 @Plugin(type = Command.class, menuPath = "XWing>EDF projection>Max Entropy (DCTS2D) projection")
 public class MaxEntropyDCTS2DProjectionPlugin<T extends RealType<T>> extends
         AbstractMaxProjectionPlugin<T> implements Command
