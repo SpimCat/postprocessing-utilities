@@ -67,8 +67,8 @@ public class HalfStackProjectionOnFolderPlugin implements Command {
         File[] files = inputDirectory.listFiles();
         for (int i = firstFileIndex; i < lastFileIndex && i < files.length; i = i + stepFileIndex) {
             System.out.println(sourceFolder + files[i].getName());
-            IJ.open(sourceFolder + files[i].getName());
-            ImagePlus inputImage = IJ.getImage();
+            //
+            ImagePlus inputImage = IJ.openImage(sourceFolder + files[i].getName());
             //inputImage.show();
 
             if (command instanceof TakesAnInputImage) {
