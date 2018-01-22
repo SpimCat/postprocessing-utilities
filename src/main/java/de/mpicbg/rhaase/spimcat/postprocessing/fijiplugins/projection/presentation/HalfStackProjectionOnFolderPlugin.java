@@ -69,14 +69,14 @@ public class HalfStackProjectionOnFolderPlugin implements Command {
             System.out.println(sourceFolder + files[i].getName());
             IJ.open(sourceFolder + files[i].getName());
             ImagePlus inputImage = IJ.getImage();
-            inputImage.show();
+            //inputImage.show();
 
             if (command instanceof TakesAnInputImage) {
                 System.out.println("Setting in put to "+ inputImage.getTitle() + " "  + inputImage.getNSlices());
                 ((TakesAnInputImage) command).setInputImage(inputImage);
             }
             if (command instanceof AllowsShowingTheResult) {
-                ((AllowsShowingTheResult) command).setShowResult(true);
+                ((AllowsShowingTheResult) command).setShowResult(false);
             }
 
             command.run();
