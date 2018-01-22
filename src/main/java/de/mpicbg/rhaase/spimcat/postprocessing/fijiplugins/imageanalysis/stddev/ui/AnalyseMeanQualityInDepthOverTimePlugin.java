@@ -46,11 +46,15 @@ public class AnalyseMeanQualityInDepthOverTimePlugin implements Command {
     @Parameter (required = false)
     private int depthStep = 10;
 
+    @Parameter
+    private boolean reportOnPixelCount = false;
+
 
     @Override
     public void run() {
 
         Double[][] measurements = new Double[imagePlus.getNSlices()][];
+        Long[][] pixelCounts = new Long[imagePlus.getNSlices()][];
         for (int z = 0; z < imagePlus.getNSlices(); z++) {
             System.out.println("z: " + z);
 
@@ -63,6 +67,7 @@ public class AnalyseMeanQualityInDepthOverTimePlugin implements Command {
             averageInDepthCalculator.setDepthStep(depthStep);
 
             measurements[z] = averageInDepthCalculator.getMeasurements();
+            pixelCounts[z] = averageInDepthCalculator.getPixelCounts();
         }
 
         ResultsTable resultsTable = ResultsTable.getResultsTable();
@@ -73,6 +78,11 @@ public class AnalyseMeanQualityInDepthOverTimePlugin implements Command {
 
             for (int z = 0; z < imagePlus.getNSlices(); z++) {
                 resultsTable.addValue("Average_" + z, measurements[z][i]);
+            }
+            if (reportOnPixelCount) {
+                for (int z = 0; z < imagePlus.getNSlices(); z++) {
+                    resultsTable.addValue("Pixel_count_" + z, pixelCounts[z][i]);
+                }
             }
         }
         resultsTable.show("Results");

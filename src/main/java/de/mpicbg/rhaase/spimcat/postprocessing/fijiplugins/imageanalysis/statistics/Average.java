@@ -33,6 +33,7 @@ public class Average<T extends RealType<T>>
       count++;
     }
     mean = sum / count;
+    System.out.println("Avg is : " + mean);
     resultValid = true;
   }
 

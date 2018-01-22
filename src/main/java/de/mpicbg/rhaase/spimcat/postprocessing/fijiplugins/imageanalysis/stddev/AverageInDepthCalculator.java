@@ -29,12 +29,14 @@ public class AverageInDepthCalculator<T extends RealType<T>> {
     private int depthStep = 10;
 
     private Double[] measurements = null;
+    private Long[] pixelCounts = null;
+
     private RandomAccessibleInterval<BoolType>[] analysedRegions;
     private int minDepthInPixels;
 
     public AverageInDepthCalculator(Img<T> image, Img<T> qualityImage, OpService ops) {
         this.image = image;
-        this.qualityImage = image;
+        this.qualityImage = qualityImage;
         this.ops = ops;
     }
 
@@ -49,7 +51,8 @@ public class AverageInDepthCalculator<T extends RealType<T>> {
 
         RingRegionGenerator ringRegionGenerator = new RingRegionGenerator(binaryImg, ops);
 
-        ArrayList<Double> standardDeviationList = new ArrayList<>();
+        ArrayList<Double> averageList = new ArrayList<>();
+        ArrayList<Long> pixelCountList = new ArrayList<>();
         ArrayList<RandomAccessibleInterval<BoolType>> analysedRegionsList = new ArrayList<>();
 
         for (int position = minDepthInPixels + depthStep; position <= maxDepthInPixels; position += depthStep) {
@@ -64,11 +67,16 @@ public class AverageInDepthCalculator<T extends RealType<T>> {
             Average<T> average = new Average<>(region);
 
             analysedRegionsList.add(ring);
-            standardDeviationList.add(average.getAverage());
+            averageList.add(average.getAverage());
+            pixelCountList.add(average.getCount());
         }
 
-        measurements = new Double[standardDeviationList.size()];
-        standardDeviationList.toArray(measurements);
+        measurements = new Double[averageList.size()];
+        averageList.toArray(measurements);
+
+
+        pixelCounts = new Long[pixelCountList.size()];
+        pixelCountList.toArray(pixelCounts);
 
         analysedRegions = new RandomAccessibleInterval[analysedRegionsList.size()];
         analysedRegionsList.toArray(analysedRegions);
@@ -79,6 +87,10 @@ public class AverageInDepthCalculator<T extends RealType<T>> {
     public Double[] getMeasurements() {
         process();
         return measurements;
+    }
+    public Long[] getPixelCounts() {
+        process();
+        return pixelCounts;
     }
 
 

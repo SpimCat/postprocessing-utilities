@@ -1,10 +1,10 @@
 package de.mpicbg.rhaase.spimcat.postprocessing.fijiplugins.projection;
 
-import de.mpicbg.rhaase.spimcat.postprocessing.utilities.scijava.image.PixelwiseImageProduct;
-import de.mpicbg.rhaase.spimcat.postprocessing.utilities.scijava.image.Sampler;
-import de.mpicbg.rhaase.spimcat.postprocessing.utilities.scijava.image.ThresholdImage;
 import de.mpicbg.rhaase.spimcat.postprocessing.fijiplugins.imageanalysis.statistics.Average;
 import de.mpicbg.rhaase.spimcat.postprocessing.fijiplugins.imageanalysis.statistics.StandardDeviation;
+import de.mpicbg.rhaase.spimcat.postprocessing.fijiplugins.imagemath.PixelwiseImageProduct;
+import de.mpicbg.rhaase.spimcat.postprocessing.fijiplugins.imagemath.Sampler;
+import de.mpicbg.rhaase.spimcat.postprocessing.fijiplugins.imagemath.ThresholdImage;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.Img;
 import net.imglib2.type.numeric.RealType;

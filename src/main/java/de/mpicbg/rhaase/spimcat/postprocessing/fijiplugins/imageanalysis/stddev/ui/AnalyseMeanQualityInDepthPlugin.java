@@ -52,6 +52,9 @@ public class AnalyseMeanQualityInDepthPlugin implements Command {
     @Parameter (type = ItemIO.OUTPUT)
     private Double[] measurements;
 
+    @Parameter (type = ItemIO.OUTPUT)
+    private Long[] pixelCounts;
+
     @Parameter
     private boolean showResultTable = true;
 
@@ -68,6 +71,7 @@ public class AnalyseMeanQualityInDepthPlugin implements Command {
         averageInDepthCalculator.setMaxDepthInPixels(maxDepthInPixels);
         averageInDepthCalculator.setDepthStep(depthStep);
         measurements = averageInDepthCalculator.getMeasurements();
+        pixelCounts = averageInDepthCalculator.getPixelCounts();
 
         RandomAccessibleInterval<BoolType>[] analysedRegions = averageInDepthCalculator.getAnalysedRegions();
         Overlay overlay = imagePlus.getOverlay();
@@ -78,9 +82,10 @@ public class AnalyseMeanQualityInDepthPlugin implements Command {
         ResultsTable resultsTable = ResultsTable.getResultsTable();
         for (int i = 0; i < measurements.length; i++) {
             resultsTable.incrementCounter();
-            resultsTable.addValue("Min depth", minDepthInPixels + i * depthStep);
-            resultsTable.addValue("Max depth", minDepthInPixels + (i + 1) * depthStep);
+            resultsTable.addValue("Min_depth", minDepthInPixels + i * depthStep);
+            resultsTable.addValue("Max_depth", minDepthInPixels + (i + 1) * depthStep);
             resultsTable.addValue("Average", measurements[i]);
+            resultsTable.addValue("Pixel_count", pixelCounts[i]);
 
             overlay.add(new RegionToRoiConverter(analysedRegions[i]).getRoi());
         }
