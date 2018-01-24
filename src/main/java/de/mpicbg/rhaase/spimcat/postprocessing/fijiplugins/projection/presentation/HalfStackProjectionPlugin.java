@@ -35,13 +35,14 @@ public class HalfStackProjectionPlugin implements Command, AllowsSilentProcessin
     public static int minSlice = 0;
     public static int maxSlice = 50;
 
-    public static boolean cameraOffsetCorrection = true;
+    public static boolean cameraOffsetCorrection = false;
     public static double minimumGreyValue = 105;
 
-    public static boolean backgroundSubtraction = true;
+    public static boolean backgroundSubtraction = false;
     public static int backgroundSubtractionRollingBallSize = 20;
 
-    public static boolean unevenIlluminationCorrection = true;
+    public static boolean unevenIlluminationCorrectionBeforeProjection = true;
+    public static boolean unevenIlluminationCorrectionAfterProjection = false;
     public static double unevenIlluminationCorrectionGaussSigma = 50;
 
     public static boolean autoContrast = true;
@@ -66,7 +67,8 @@ public class HalfStackProjectionPlugin implements Command, AllowsSilentProcessin
 
         System.out.println("backgroundSubtraction: " + backgroundSubtraction);
         System.out.println("backgroundSubtractionRollingBallSize: " + backgroundSubtractionRollingBallSize);
-        System.out.println("unevenIlluminationCorrection: " + unevenIlluminationCorrection);
+        System.out.println("unevenIlluminationCorrectionBeforeProjection: " + unevenIlluminationCorrectionBeforeProjection);
+        System.out.println("unevenIlluminationCorrectionAfterProjection: " + unevenIlluminationCorrectionAfterProjection);
         System.out.println("unevenIlluminationCorrectionGaussSigma: " + unevenIlluminationCorrectionGaussSigma);
         System.out.println("autoContrast: " + autoContrast);
 
@@ -75,11 +77,22 @@ public class HalfStackProjectionPlugin implements Command, AllowsSilentProcessin
         //imageCopy.show();
 
         //imageCopy = new Duplicator().run (imageCopy,minSlice + 1, maxSlice + 1);
-        //if (cameraOffsetCorrection) {
-        //    setPixelsBelowThresholdToZero(imageCopy, minimumGreyValue);
-        //}
+        if (cameraOffsetCorrection) {
+            setPixelsBelowThresholdToZero(imageCopy, minimumGreyValue);
+        }
         //imageCopy.show();
         //if (true) return;
+
+        if (unevenIlluminationCorrectionBeforeProjection) {
+            ImagePlus illuminationImage = new Duplicator().run(imageCopy, 1, imageCopy.getNSlices());
+            illuminationImage.show();
+            illuminationImage.setTitle("illu");
+            IJ.run(illuminationImage, "Gaussian Blur...", "sigma=" + unevenIlluminationCorrectionGaussSigma + " stack");
+            ImageCalculator imageCalculator = new ImageCalculator();
+            imageCopy = imageCalculator.run("Divide create 32-bit stack", imageCopy, illuminationImage);
+            imageCopy.show();
+            imageCopy.setTitle("divi");
+        }
 
         if (backgroundSubtraction) {
             //imageCopy = new Duplicator().run (imageCopy,minSlice + 1, maxSlice + 1);
@@ -90,6 +103,7 @@ public class HalfStackProjectionPlugin implements Command, AllowsSilentProcessin
 
         }
 
+
         //imageCopy.show();
         //IJ.run(imageCopy, "Z Project...", "projection=[Max Intensity]");
         //imageCopy = IJ.getImage();
@@ -97,9 +111,9 @@ public class HalfStackProjectionPlugin implements Command, AllowsSilentProcessin
 
         System.out.println("Project has " + imageCopy.getNSlices() + " slices");
 
-        if (unevenIlluminationCorrection) {
+        if (unevenIlluminationCorrectionAfterProjection) {
             ImagePlus illuminationImage = new Duplicator().run(imageCopy);
-            IJ.run(illuminationImage, "Gaussian Blur...", "sigma=50");
+            IJ.run(illuminationImage, "Gaussian Blur...", "sigma=" + unevenIlluminationCorrectionGaussSigma);
             ImageCalculator imageCalculator = new ImageCalculator();
             imageCopy = imageCalculator.run("Divide create 32-bit", imageCopy, illuminationImage);
         }
@@ -138,16 +152,17 @@ public class HalfStackProjectionPlugin implements Command, AllowsSilentProcessin
         gd.addNumericField("First Slice (zero-based)", minSlice, 0);
         gd.addNumericField("Last Slice (zero-based)", maxSlice, 0);
 
-        //gd.addMessage("Image quality can be improved by initially removing camera offset and a certain noise level.\nYou can determine this value by taking an image slice without sample and measuring maximum intensity in this image.");
-        //gd.addCheckbox("Camera offset / noise subtraction", cameraOffsetCorrection);
-        //gd.addNumericField("Minimum grey value", minimumGreyValue, 0);
+        gd.addMessage("Image quality can be improved by initially removing camera offset and a certain noise level.\nYou can determine this value by taking an image slice without sample and measuring maximum intensity in this image.");
+        gd.addCheckbox("Camera offset / noise subtraction", cameraOffsetCorrection);
+        gd.addNumericField("Minimum grey value", minimumGreyValue, 0);
 
         gd.addMessage("Background subtraction helps getting a clear image of the bright structures you would like to visualise by eliminating all surrounding signal. Enter the size of the largest thinkable object you not like to loose by background subtraction.");
         gd.addCheckbox("Background subtraction", backgroundSubtraction);
         gd.addNumericField("Background subtraction rolling ball radius (in pixels)", backgroundSubtractionRollingBallSize, 0);
 
         gd.addMessage("Uneven illumination correction makes all bright spots similarily bright. Enter a sigma which is by one order of magnitude higher than the expected size of the objects of interest.");
-        gd.addCheckbox("Uneven illumination correction", unevenIlluminationCorrection);
+        gd.addCheckbox("Uneven illumination correction before projection", unevenIlluminationCorrectionBeforeProjection);
+        gd.addCheckbox("Uneven illumination correction after projection", unevenIlluminationCorrectionAfterProjection);
         gd.addNumericField("Uneven illumination correction Gaussian blur sigma (in pixels)", unevenIlluminationCorrectionGaussSigma, 2);
 
         gd.addMessage("'Auto contrast' clicks the 'Auto' button in the Brightness/Contrst dialog for you.");
@@ -161,13 +176,14 @@ public class HalfStackProjectionPlugin implements Command, AllowsSilentProcessin
         minSlice = Integer.max((int)gd.getNextNumber(), 0);
         maxSlice = Integer.min((int)gd.getNextNumber(), inputImage.getNSlices() - 1);
 
-        //cameraOffsetCorrection = gd.getNextBoolean();
-        //minimumGreyValue = gd.getNextNumber();
+        cameraOffsetCorrection = gd.getNextBoolean();
+        minimumGreyValue = gd.getNextNumber();
 
         backgroundSubtraction = gd.getNextBoolean();
         backgroundSubtractionRollingBallSize = (int)gd.getNextNumber();
 
-        unevenIlluminationCorrection = gd.getNextBoolean();
+        unevenIlluminationCorrectionBeforeProjection = gd.getNextBoolean();
+        unevenIlluminationCorrectionAfterProjection = gd.getNextBoolean();
         unevenIlluminationCorrectionGaussSigma = gd.getNextNumber();
 
         autoContrast = gd.getNextBoolean();

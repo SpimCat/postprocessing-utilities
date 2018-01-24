@@ -20,29 +20,37 @@ import java.io.File;
 
 @Plugin(type = Command.class, menuPath = "XWing>Presentation>Half stack projection on files in a folder")
 public class HalfStackProjectionOnFolderPlugin implements Command {
+
+    private static String inputFolder = "";
+    private static String outputFolder = "";
+
+    private static int firstFileIndex = 0;
+    private static int lastFileIndex = 49;
+    private static int fileStep = 1;
+
+
     @Override
     public void run() {
         GenericDialogPlus gd = new GenericDialogPlus("Half stack projection on a folder");
-        gd.addDirectoryField("Input directory", "");
-        gd.addDirectoryField("Output directory", "");
+        gd.addDirectoryField("Input directory", inputFolder);
+        gd.addDirectoryField("Output directory", outputFolder);
 
-        gd.addNumericField("First file index (Zero-based)", 0, 0);
-        gd.addNumericField("Last file index (Zero-based)", 50, 0);
+        gd.addNumericField("First file index (Zero-based)", firstFileIndex, 0);
+        gd.addNumericField("Last file index (Zero-based)", lastFileIndex, 0);
 
-        gd.addNumericField("File step (1 to process all files, 2 to process every second...)", 1, 0);
+        gd.addNumericField("File step (1 to process all files, 2 to process every second...)", fileStep, 0);
 
         gd.showDialog();
         if (gd.wasCanceled()) {
             return;
         }
-        String inputFolder = gd.getNextString();
-        String outputFolder = gd.getNextString();
-        int firstFileIndex = (int)gd.getNextNumber();
-        int lastFileIndex = (int)gd.getNextNumber();
-        int fileStep = (int)gd.getNextNumber();
+        inputFolder = gd.getNextString();
+        outputFolder = gd.getNextString();
+        firstFileIndex = (int)gd.getNextNumber();
+        lastFileIndex = (int)gd.getNextNumber();
+        fileStep = (int)gd.getNextNumber();
 
         processFolder(inputFolder, outputFolder, firstFileIndex, lastFileIndex, fileStep, new HalfStackProjectionPlugin());
-
     }
 
     public static boolean processFolder(String sourceFolder, String targetFolder, int firstFileIndex, int lastFileIndex, int stepFileIndex, Command command)
