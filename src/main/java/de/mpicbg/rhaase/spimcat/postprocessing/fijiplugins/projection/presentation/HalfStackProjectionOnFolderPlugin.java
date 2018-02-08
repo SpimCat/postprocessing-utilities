@@ -28,6 +28,8 @@ public class HalfStackProjectionOnFolderPlugin implements Command {
     private static int lastFileIndex = 49;
     private static int fileStep = 1;
 
+    private static boolean transformTo8bit = true;
+
 
     @Override
     public void run() {
@@ -39,6 +41,7 @@ public class HalfStackProjectionOnFolderPlugin implements Command {
         gd.addNumericField("Last file index (Zero-based)", lastFileIndex, 0);
 
         gd.addNumericField("File step (1 to process all files, 2 to process every second...)", fileStep, 0);
+        gd.addCheckbox("Finally, transform to 8-bit", transformTo8bit);
 
         gd.showDialog();
         if (gd.wasCanceled()) {
@@ -49,11 +52,12 @@ public class HalfStackProjectionOnFolderPlugin implements Command {
         firstFileIndex = (int)gd.getNextNumber();
         lastFileIndex = (int)gd.getNextNumber();
         fileStep = (int)gd.getNextNumber();
+        transformTo8bit = gd.getNextBoolean();
 
-        processFolder(inputFolder, outputFolder, firstFileIndex, lastFileIndex, fileStep, new HalfStackProjectionPlugin());
+        processFolder(inputFolder, outputFolder, firstFileIndex, lastFileIndex, fileStep, transformTo8bit, new HalfStackProjectionPlugin());
     }
 
-    public static boolean processFolder(String sourceFolder, String targetFolder, int firstFileIndex, int lastFileIndex, int stepFileIndex, Command command)
+    public static boolean processFolder(String sourceFolder, String targetFolder, int firstFileIndex, int lastFileIndex, int stepFileIndex, boolean transformTo8bit, Command command)
     {
         if (!(sourceFolder.endsWith("/") || sourceFolder.endsWith("\\"))) {
             sourceFolder = sourceFolder + "/";
@@ -91,8 +95,9 @@ public class HalfStackProjectionOnFolderPlugin implements Command {
 
             if (command instanceof DeliversOutputImage) {
                 ImagePlus result = ((DeliversOutputImage) command).getOutputImage();
-
-                IJ.run(result,"8-bit", "");
+                if (transformTo8bit) {
+                    IJ.run(result, "8-bit", "");
+                }
                 IJ.saveAsTiff(result, targetFolder + files[i].getName());
             }
             if (command instanceof AllowsSilentProcessing) {
@@ -108,7 +113,7 @@ public class HalfStackProjectionOnFolderPlugin implements Command {
         }
         return true;
     }
-
+/*
     public static void main(String... args) {
         String inputFolder = "C:/structure/data/xwing/2018-01-18-16-30-25-11-Robert_CalibZAP_Wfixed/processed/tif/";
         String outputFolder = "C:/structure/data/xwing/2018-01-18-16-30-25-11-Robert_CalibZAP_Wfixed/processed/test/";
@@ -116,5 +121,5 @@ public class HalfStackProjectionOnFolderPlugin implements Command {
 
         HalfStackProjectionOnFolderPlugin.processFolder(inputFolder, outputFolder, 0, 8, 1, new HalfStackProjectionPlugin());
     }
-
+*/
 }

@@ -10,6 +10,7 @@ import ij.ImagePlus;
 import ij.gui.GenericDialog;
 import ij.plugin.Duplicator;
 import ij.plugin.ImageCalculator;
+
 import ij.plugin.ZProjector;
 import ij.process.ImageProcessor;
 import org.scijava.command.Command;
@@ -34,6 +35,9 @@ public class HalfStackProjectionPlugin implements Command, AllowsSilentProcessin
 
     public static int minSlice = 0;
     public static int maxSlice = 50;
+
+    public static boolean colorProjection = false;
+    public static boolean reslice = false;
 
     public static boolean cameraOffsetCorrection = false;
     public static double minimumGreyValue = 105;
@@ -63,6 +67,12 @@ public class HalfStackProjectionPlugin implements Command, AllowsSilentProcessin
         System.out.println("minSlice: " + minSlice);
         System.out.println("maxSlice: " + maxSlice);
 
+
+        System.out.println("reslice: " + reslice);
+
+        System.out.println("colorProjection: " + colorProjection);
+
+        System.out.println("cameraOffsetCorrection:" + cameraOffsetCorrection);
         System.out.println("Minimum grey value:" + minimumGreyValue);
 
         System.out.println("backgroundSubtraction: " + backgroundSubtraction);
@@ -72,7 +82,23 @@ public class HalfStackProjectionPlugin implements Command, AllowsSilentProcessin
         System.out.println("unevenIlluminationCorrectionGaussSigma: " + unevenIlluminationCorrectionGaussSigma);
         System.out.println("autoContrast: " + autoContrast);
 
-        ImagePlus imageCopy = new Duplicator().run (inputImage,minSlice + 1, maxSlice + 1);
+
+        ImagePlus imageCopy = inputImage;
+        if (reslice) {
+            /*IJ.run(imageCopy, "Reslice [/]...", "output=" + imageCopy.getCalibration().pixelDepth + " start=Left");
+
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            imageCopy = IJ.getImage();
+            imageCopy.hide();*/
+            imageCopy = new Slicer(imageCopy.getCalibration().pixelDepth, (int)(imageCopy.getCalibration().pixelWidth * imageCopy.getWidth() / imageCopy.getCalibration().pixelDepth)).reslice(imageCopy);
+            imageCopy.show();
+        }
+
+        imageCopy = new Duplicator().run (imageCopy,minSlice + 1, maxSlice + 1);
         IJ.run(imageCopy, "32-bit", "");
         //imageCopy.show();
 
@@ -85,13 +111,13 @@ public class HalfStackProjectionPlugin implements Command, AllowsSilentProcessin
 
         if (unevenIlluminationCorrectionBeforeProjection) {
             ImagePlus illuminationImage = new Duplicator().run(imageCopy, 1, imageCopy.getNSlices());
-            illuminationImage.show();
-            illuminationImage.setTitle("illu");
+            //illuminationImage.show();
+            //illuminationImage.setTitle("illu");
             IJ.run(illuminationImage, "Gaussian Blur...", "sigma=" + unevenIlluminationCorrectionGaussSigma + " stack");
             ImageCalculator imageCalculator = new ImageCalculator();
             imageCopy = imageCalculator.run("Divide create 32-bit stack", imageCopy, illuminationImage);
-            imageCopy.show();
-            imageCopy.setTitle("divi");
+            //imageCopy.show();
+            //imageCopy.setTitle("divi");
         }
 
         if (backgroundSubtraction) {
@@ -107,8 +133,22 @@ public class HalfStackProjectionPlugin implements Command, AllowsSilentProcessin
         //imageCopy.show();
         //IJ.run(imageCopy, "Z Project...", "projection=[Max Intensity]");
         //imageCopy = IJ.getImage();
-        imageCopy = ZProjector.run(imageCopy, "Max Intensity");
+        if (colorProjection) {
+            imageCopy.show();
+            IJ.run(imageCopy, "Temporal-Color Code", "lut=Ice start=1 end=" + imageCopy.getNSlices());
 
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            imageCopy.hide();
+            imageCopy = IJ.getImage();
+            imageCopy.hide();
+        } else {
+            imageCopy = ZProjector.run(imageCopy, "Max Intensity");
+
+        }
         System.out.println("Project has " + imageCopy.getNSlices() + " slices");
 
         if (unevenIlluminationCorrectionAfterProjection) {
@@ -152,6 +192,10 @@ public class HalfStackProjectionPlugin implements Command, AllowsSilentProcessin
         gd.addNumericField("First Slice (zero-based)", minSlice, 0);
         gd.addNumericField("Last Slice (zero-based)", maxSlice, 0);
 
+        gd.addCheckbox("Colour projection", colorProjection);
+
+        gd.addCheckbox("Reslice the stack from left before projection", reslice);
+
         gd.addMessage("Image quality can be improved by initially removing camera offset and a certain noise level.\nYou can determine this value by taking an image slice without sample and measuring maximum intensity in this image.");
         gd.addCheckbox("Camera offset / noise subtraction", cameraOffsetCorrection);
         gd.addNumericField("Minimum grey value", minimumGreyValue, 0);
@@ -176,6 +220,10 @@ public class HalfStackProjectionPlugin implements Command, AllowsSilentProcessin
         minSlice = Integer.max((int)gd.getNextNumber(), 0);
         maxSlice = Integer.min((int)gd.getNextNumber(), inputImage.getNSlices() - 1);
 
+        colorProjection = gd.getNextBoolean();
+
+        reslice = gd.getNextBoolean();
+
         cameraOffsetCorrection = gd.getNextBoolean();
         minimumGreyValue = gd.getNextNumber();
 
@@ -193,12 +241,12 @@ public class HalfStackProjectionPlugin implements Command, AllowsSilentProcessin
 
     public static void main(String ... args) {
         new ImageJ();
-        ImagePlus inputImage = IJ.openImage("C:/structure/data/xwing/2018-01-18-16-30-25-11-Robert_CalibZAP_Wfixed/processed/tif/000200.raw.tif");
+        ImagePlus inputImage = IJ.openImage("C:/structure/data/xwing/2018-01-18-16-30-25-11-Robert_CalibZAP_Wfixed/processed/tif/001000.raw.tif");
 
         HalfStackProjectionPlugin halfStackProjectionPlugin = new HalfStackProjectionPlugin();
         halfStackProjectionPlugin.setInputImage(inputImage);
         halfStackProjectionPlugin.minSlice = 0;
-        halfStackProjectionPlugin.maxSlice = 55;
+        halfStackProjectionPlugin.maxSlice = 60;
         halfStackProjectionPlugin.run();
 
 
