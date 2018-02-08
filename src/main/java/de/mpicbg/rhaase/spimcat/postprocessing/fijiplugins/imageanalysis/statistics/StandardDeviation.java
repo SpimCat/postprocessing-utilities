@@ -37,7 +37,7 @@ public class StandardDeviation<T extends RealType<T>>
     while (cursor.hasNext()) {
       sum += Math.pow(cursor.next().getRealDouble() - mean, 2);
     }
-    standardDeviation = sum / (count - 1);
+    standardDeviation = Math.sqrt(sum / (count - 1));
   }
 
   public double getStandardDevation() {

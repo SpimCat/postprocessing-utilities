@@ -14,7 +14,7 @@
 
 	<groupId>de.mpicbg.rhaase</groupId>
 	<artifactId>postprocessing-utilities</artifactId>
-	<version>0.2.4</version>
+	<version>0.2.7</version>
 
 	<name>postprocessing-utilities</name>
 	<description>postprocessing-utilities</description>
