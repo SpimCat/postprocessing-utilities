@@ -14,7 +14,7 @@
 
 	<groupId>de.mpicbg.rhaase</groupId>
 	<artifactId>postprocessing-utilities</artifactId>
-	<version>0.2.7</version>
+	<version>0.2.8</version>
 
 	<name>postprocessing-utilities</name>
 	<description>postprocessing-utilities</description>
@@ -119,6 +119,11 @@
 			<groupId>sc.fiji</groupId>
 			<artifactId>fiji-lib</artifactId>
 			<version>2.1.2</version>
+		</dependency>
+		<dependency>
+			<groupId>net.clearcontrol</groupId>
+			<artifactId>clearclij</artifactId>
+			<version>0.3.14</version>
 		</dependency>
 	</dependencies>
 
