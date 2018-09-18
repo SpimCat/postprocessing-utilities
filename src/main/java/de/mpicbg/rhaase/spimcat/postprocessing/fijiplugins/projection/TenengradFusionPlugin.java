@@ -32,7 +32,7 @@ public class TenengradFusionPlugin implements Command {
     public static double blurWeightsSigmaY = 15;
     public static double blurWeightsSigmaZ = 5;
 
-    public static boolean silent = true;
+    public static boolean silent = false;
 
     public static boolean showResult = true;
 
