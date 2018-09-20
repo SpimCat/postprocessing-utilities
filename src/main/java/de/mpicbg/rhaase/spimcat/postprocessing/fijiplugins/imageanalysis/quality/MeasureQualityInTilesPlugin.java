@@ -40,7 +40,7 @@ import java.util.HashMap;
 public class MeasureQualityInTilesPlugin extends AbstractFocusMeasuresPlugin implements
         Command, AllowsSilentProcessing, AllowsShowingTheResult
 {
-    private final static int defaultTileSize = 16;
+    final static int defaultTileSize = 16;
     ClearCLIJ clij;
 
 
@@ -206,26 +206,29 @@ public class MeasureQualityInTilesPlugin extends AbstractFocusMeasuresPlugin imp
         mqitp.setShowResult(false);
 
         ImagePlus tenengrad = mqitp.analyseFocusMeasure(FocusMeasures.FocusMeasure.DifferentialTenengrad);
-        ImagePlus dcts2d = mqitp.analyseFocusMeasure(FocusMeasures.FocusMeasure.SpectralNormDCTEntropyShannon);
-        ImagePlus mean = mqitp.analyseFocusMeasure(FocusMeasures.FocusMeasure.StatisticMean);
+        //ImagePlus dcts2d = mqitp.analyseFocusMeasure(FocusMeasures.FocusMeasure.SpectralNormDCTEntropyShannon);
+        //ImagePlus mean = mqitp.analyseFocusMeasure(FocusMeasures.FocusMeasure.StatisticMean);
 
         tenengrad.show();
         tenengrad.setTitle("tenengrad");
-        dcts2d.show();
-        dcts2d.setTitle("dcts2d");
-        mean.show();
-        mean.setTitle("mean");
+        //dcts2d.show();
+        //dcts2d.setTitle("dcts2d");
+        //mean.show();
+        //mean.setTitle("mean");
 
-        ImageCalculator ic = new ImageCalculator();
-        ImagePlus tenengradDividedByMean = ic.run("Divide create stack", tenengrad, mean);
-        tenengradDividedByMean.show();
-        tenengradDividedByMean.setTitle("tenengrad/mean");
+        ClearCLIJ clij = ClearCLIJ.getInstance();
+        ClearCLImage inputCL = clij.converter(input).getClearCLImage();
+        ClearCLImage outputCL = clij.createCLImage(inputCL);
 
-        ImagePlus dcts2dDividedByMean = ic.run("Divide create stack", dcts2d, mean);
-        dcts2dDividedByMean.show();
-        dcts2dDividedByMean.setTitle("dcts/mean");
+        Kernels.blurSliceBySlice(clij, inputCL, outputCL, 20, 20, 10,10);
 
-        //Kernels.dividePixelwise();
+        ImagePlus output = clij.converter(outputCL).getImagePlus();
+
+        inputCL.close();
+        outputCL.close();
+
+        new MeasureQualityInTilesPlugin(output, input.getWidth() / defaultTileSize, input.getHeight() / defaultTileSize).run();
+
 
 
     }

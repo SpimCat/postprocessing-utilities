@@ -14,6 +14,8 @@ import org.scijava.command.Command;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 
+import static de.mpicbg.rhaase.spimcat.postprocessing.fijiplugins.imageanalysis.quality.MeasureQualityInTilesPlugin.defaultTileSize;
+
 /**
  * MeasureHighQualityAreasPlugin
  * <p>
@@ -53,7 +55,7 @@ public class MeasureHighQualityAreasPlugin implements
     public void run() {
 
         // determine quality in tiles
-        MeasureQualityInTilesPlugin mqitp = new MeasureQualityInTilesPlugin(input, input.getWidth() / 64, input.getHeight() / 64);
+        MeasureQualityInTilesPlugin mqitp = new MeasureQualityInTilesPlugin(input, input.getWidth() / defaultTileSize, input.getHeight() / defaultTileSize);
         mqitp.setShowResult(false);
         mqitp.setSilent(true);
 
@@ -77,6 +79,7 @@ public class MeasureHighQualityAreasPlugin implements
 
         if (showResult) {
             output.show();
+            output.setDisplayRange(0, 1);
             output.setTitle("high quality mask");
         }
 
@@ -91,7 +94,18 @@ public class MeasureHighQualityAreasPlugin implements
 
         new MeasureHighQualityAreasPlugin(input).run();
 
+        ClearCLIJ clij = ClearCLIJ.getInstance();
+        ClearCLImage inputCL = clij.converter(input).getClearCLImage();
+        ClearCLImage outputCL = clij.createCLImage(inputCL);
 
+        Kernels.blurSliceBySlice(clij, inputCL, outputCL, 20, 20, 10,10);
+
+        ImagePlus output = clij.converter(outputCL).getImagePlus();
+
+        inputCL.close();
+        outputCL.close();
+
+        new MeasureHighQualityAreasPlugin(output).run();
 
     }
 }
