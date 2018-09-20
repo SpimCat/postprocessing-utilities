@@ -66,6 +66,7 @@ public class MeasureQualityInTilesPlugin extends AbstractFocusMeasuresPlugin imp
     private int numberOfTilesY = 32;
 
     private boolean silent = false;
+    private boolean showResult = true;
 
     private HashMap<FocusMeasures.FocusMeasure, Img<FloatType>>
             resultMaps;
@@ -121,10 +122,11 @@ public class MeasureQualityInTilesPlugin extends AbstractFocusMeasuresPlugin imp
             }
 
         }
-        for (FocusMeasures.FocusMeasure focusMeasure : formerChoice)
-        {
-            Img<FloatType> img = resultMaps.get(focusMeasure);
-            clij.show(img, focusMeasure.getLongName());
+        if (showResult) {
+            for (FocusMeasures.FocusMeasure focusMeasure : formerChoice) {
+                Img<FloatType> img = resultMaps.get(focusMeasure);
+                clij.show(img, focusMeasure.getLongName());
+            }
         }
     }
 
@@ -209,5 +211,10 @@ public class MeasureQualityInTilesPlugin extends AbstractFocusMeasuresPlugin imp
     @Override
     public void setSilent(boolean value) {
         silent = value;
+    }
+
+    @Override
+    public void setShowResult(boolean value) {
+        showResult = value;
     }
 }
