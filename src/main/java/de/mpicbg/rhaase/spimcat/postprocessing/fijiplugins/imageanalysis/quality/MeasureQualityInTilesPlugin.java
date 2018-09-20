@@ -8,11 +8,12 @@ import clearcl.enums.ImageChannelDataType;
 import clearcl.imagej.ClearCLIJ;
 import clearcl.imagej.kernels.Kernels;
 import de.mpicbg.rhaase.scijava.AbstractFocusMeasuresPlugin;
+import de.mpicbg.rhaase.spimcat.postprocessing.fijiplugins.api.AllowsShowingTheResult;
 import de.mpicbg.rhaase.spimcat.postprocessing.fijiplugins.api.AllowsSilentProcessing;
 import de.mpicbg.rhaase.utils.DoubleArrayImageImgConverter;
 import ij.IJ;
 import ij.ImagePlus;
-import net.imagej.ImageJ;
+import ij.plugin.ImageCalculator;
 import net.imglib2.RandomAccess;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.Img;
@@ -37,9 +38,9 @@ import java.util.HashMap;
 
 @Plugin(type = Command.class, menuPath = "XWing>Quality measurement>Image Focus Measurements tiles IMP (Adapted Autopilot code, Royer et Al. 2016)")
 public class MeasureQualityInTilesPlugin extends AbstractFocusMeasuresPlugin implements
-        Command, AllowsSilentProcessing
+        Command, AllowsSilentProcessing, AllowsShowingTheResult
 {
-    private final static int tileSize = 64;
+    private final static int defaultTileSize = 16;
     ClearCLIJ clij;
 
 
@@ -195,15 +196,36 @@ public class MeasureQualityInTilesPlugin extends AbstractFocusMeasuresPlugin imp
     public static void main(String... args) throws IOException
     {
         new ij.ImageJ();
-        
+
         ImagePlus
                 input = IJ.openImage("C:/structure/data/fish_GAFASO.tif");
         input.show();
 
-        MeasureQualityInTilesPlugin mqitp = new MeasureQualityInTilesPlugin(input, input.getWidth() / tileSize, input.getHeight() / tileSize);
+        MeasureQualityInTilesPlugin mqitp = new MeasureQualityInTilesPlugin(input, input.getWidth() / defaultTileSize, input.getHeight() / defaultTileSize);
         mqitp.setSilent(true);
-        ImagePlus result = mqitp.analyseFocusMeasure(FocusMeasures.FocusMeasure.SpectralNormDCTEntropyShannon);
-        result.show();
+        mqitp.setShowResult(false);
+
+        ImagePlus tenengrad = mqitp.analyseFocusMeasure(FocusMeasures.FocusMeasure.DifferentialTenengrad);
+        ImagePlus dcts2d = mqitp.analyseFocusMeasure(FocusMeasures.FocusMeasure.SpectralNormDCTEntropyShannon);
+        ImagePlus mean = mqitp.analyseFocusMeasure(FocusMeasures.FocusMeasure.StatisticMean);
+
+        tenengrad.show();
+        tenengrad.setTitle("tenengrad");
+        dcts2d.show();
+        dcts2d.setTitle("dcts2d");
+        mean.show();
+        mean.setTitle("mean");
+
+        ImageCalculator ic = new ImageCalculator();
+        ImagePlus tenengradDividedByMean = ic.run("Divide create stack", tenengrad, mean);
+        tenengradDividedByMean.show();
+        tenengradDividedByMean.setTitle("tenengrad/mean");
+
+        ImagePlus dcts2dDividedByMean = ic.run("Divide create stack", dcts2d, mean);
+        dcts2dDividedByMean.show();
+        dcts2dDividedByMean.setTitle("dcts/mean");
+
+        //Kernels.dividePixelwise();
 
 
     }
