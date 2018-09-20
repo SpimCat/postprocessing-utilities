@@ -4,7 +4,6 @@ import clearcl.ClearCLImage;
 import clearcl.enums.ImageChannelDataType;
 import clearcl.imagej.ClearCLIJ;
 import clearcl.imagej.kernels.Kernels;
-import com.nativelibs4java.opencl.CLImage;
 import ij.IJ;
 import ij.ImageJ;
 import ij.ImagePlus;
