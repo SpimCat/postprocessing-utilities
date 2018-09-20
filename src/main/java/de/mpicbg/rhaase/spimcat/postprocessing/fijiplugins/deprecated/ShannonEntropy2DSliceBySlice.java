@@ -23,7 +23,7 @@ import org.scijava.ui.UIService;
  * November 2017
  */
 @Deprecated
-@Plugin(type = Command.class, menuPath = "XWing>Internal (experimental)>Shannon Entropy 2D slice by slice")
+@Plugin(type = Command.class, menuPath = "SpimCat>Internal (experimental)>Shannon Entropy 2D slice by slice")
 public class ShannonEntropy2DSliceBySlice<T extends RealType<T>> implements
         Command
 {

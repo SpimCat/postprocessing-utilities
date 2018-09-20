@@ -18,7 +18,7 @@ import org.scijava.plugin.Plugin;
  * September 2018
  */
 
-@Plugin(type = Command.class, menuPath = "XWing>Internal (experimental)>Equalize grey values of slices")
+@Plugin(type = Command.class, menuPath = "SpimCat>Internal (experimental)>Equalize grey values of slices")
 public class EqualizeMeanGreyValueOfSlices implements Command, AllowsShowingTheResult {
 
     @Deprecated

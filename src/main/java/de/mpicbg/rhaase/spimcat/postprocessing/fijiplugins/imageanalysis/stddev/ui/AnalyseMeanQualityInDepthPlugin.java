@@ -25,7 +25,7 @@ import java.io.IOException;
  * Author: Robert Haase (http://haesleinhuepf.net) at MPI CBG (http://mpi-cbg.de)
  * December 2017
  */
-@Plugin(type = Command.class, menuPath = "XWing>Quality measurement>Measure average in rings / hulls")
+@Plugin(type = Command.class, menuPath = "SpimCat>Quality measurement>Measure average in rings / hulls")
 public class AnalyseMeanQualityInDepthPlugin implements Command {
 
     @Parameter

@@ -13,7 +13,7 @@ import org.scijava.ui.UIService;
  * Author: Robert Haase (http://haesleinhuepf.net) at MPI CBG (http://mpi-cbg.de)
  * January 2018
  */
-@Plugin(type = Command.class, menuPath = "XWing>Internal (experimental)>Non-negative subtraction")
+@Plugin(type = Command.class, menuPath = "SpimCat>Internal (experimental)>Non-negative subtraction")
 public class NonNegativeSubtractionPlugin<T extends RealType<T>> implements Command{
 
     @Parameter

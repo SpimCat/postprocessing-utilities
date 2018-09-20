@@ -14,7 +14,7 @@ import java.lang.reflect.GenericArrayType;
  * Author: Robert Haase (http://haesleinhuepf.net) at MPI CBG (http://mpi-cbg.de)
  * January 2018
  */
-@Plugin(type = Command.class, menuPath = "XWing>Quality measurement>Simple spot detection slice by slice")
+@Plugin(type = Command.class, menuPath = "SpimCat>Quality measurement>Simple spot detection slice by slice")
 public class SimpleSpotDetectionSliceBySliceCommand implements Command{
 
     @Parameter

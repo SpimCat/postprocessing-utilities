@@ -22,7 +22,7 @@ import java.io.IOException;
  * December 2017
  */
 
-@Plugin(type = Command.class, menuPath = "XWing>Quality measurement>Measure average in rings / hulls over time")
+@Plugin(type = Command.class, menuPath = "SpimCat>Quality measurement>Measure average in rings / hulls over time")
 public class AnalyseMeanQualityInDepthOverTimePlugin implements Command {
 
     @Parameter

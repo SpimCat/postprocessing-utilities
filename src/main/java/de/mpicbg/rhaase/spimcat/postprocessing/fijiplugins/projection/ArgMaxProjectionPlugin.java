@@ -12,7 +12,7 @@ import org.scijava.ui.UIService;
  * November 2017
  */
 
-@Plugin(type = Command.class, menuPath = "XWing>Internal (experimental)>[Arg]Max projection")
+@Plugin(type = Command.class, menuPath = "SpimCat>Internal (experimental)>[Arg]Max projection")
 public class ArgMaxProjectionPlugin<T extends RealType<T>> implements Command
 {
 

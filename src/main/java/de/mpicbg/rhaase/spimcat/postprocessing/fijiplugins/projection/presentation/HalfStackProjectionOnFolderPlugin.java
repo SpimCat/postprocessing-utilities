@@ -18,7 +18,7 @@ import java.io.File;
  * January 2018
  */
 
-@Plugin(type = Command.class, menuPath = "XWing>Presentation>Half stack projection on files in a folder")
+@Plugin(type = Command.class, menuPath = "SpimCat>Presentation>Half stack projection on files in a folder")
 public class HalfStackProjectionOnFolderPlugin implements Command {
 
     private static String inputFolder = "";

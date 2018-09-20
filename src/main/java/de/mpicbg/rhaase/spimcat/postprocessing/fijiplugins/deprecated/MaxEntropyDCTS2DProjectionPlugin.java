@@ -15,7 +15,7 @@ import org.scijava.plugin.Plugin;
  * November 2017
  */
 @Deprecated
-@Plugin(type = Command.class, menuPath = "XWing>EDF projection>Max Entropy (DCTS2D) projection")
+@Plugin(type = Command.class, menuPath = "SpimCat>EDF projection>Max Entropy (DCTS2D) projection")
 public class MaxEntropyDCTS2DProjectionPlugin<T extends RealType<T>> extends
         AbstractMaxProjectionPlugin<T> implements Command
 {

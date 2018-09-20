@@ -25,7 +25,7 @@ import java.util.ArrayList;
  * Author: Robert Haase (http://haesleinhuepf.net) at MPI CBG (http://mpi-cbg.de)
  * January 2018
  */
-@Plugin(type = Command.class, menuPath = "XWing>EDF projection>EDF stack DI-ID reordering")
+@Plugin(type = Command.class, menuPath = "SpimCat>EDF projection>EDF stack DI-ID reordering")
 public class EDFStackReorderingPlugin implements Command, TakesAnInputImage, AllowsSilentProcessing, DeliversOutputImage, AllowsShowingTheResult
 {    @Parameter
     ImagePlus inputImage;

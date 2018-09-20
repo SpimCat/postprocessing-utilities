@@ -25,7 +25,7 @@ import org.scijava.plugin.Plugin;
  * January 2018
  */
 
-@Plugin(type = Command.class, menuPath = "XWing>Presentation>Half stack projection")
+@Plugin(type = Command.class, menuPath = "SpimCat>Presentation>Half stack projection")
 public class HalfStackProjectionPlugin implements Command, AllowsSilentProcessing, TakesAnInputImage, DeliversOutputImage, AllowsShowingTheResult
 {
     @Parameter

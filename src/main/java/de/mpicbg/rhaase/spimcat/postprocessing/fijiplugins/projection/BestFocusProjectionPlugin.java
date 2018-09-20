@@ -15,7 +15,7 @@ import org.scijava.ui.UIService;
  * November 2017
  */
 
-@Plugin(type = Command.class, menuPath = "XWing>EDF projection>Best (max DCTS2D) focused slice")
+@Plugin(type = Command.class, menuPath = "SpimCat>EDF projection>Best (max DCTS2D) focused slice")
 public class BestFocusProjectionPlugin<T extends RealType<T>> implements Command
 {
   @Parameter private Img<T> input;

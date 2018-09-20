@@ -20,7 +20,7 @@ import org.scijava.ui.UIService;
  * November 2017
  */
 @Deprecated
-@Plugin(type = Command.class, menuPath = "XWing>Internal (experimental)>Standard deviation 2D slice by slice")
+@Plugin(type = Command.class, menuPath = "SpimCat>Internal (experimental)>Standard deviation 2D slice by slice")
 public class StandardDeviationPerPixelPlugin<T extends RealType<T>> implements
                                                                          Command
 {

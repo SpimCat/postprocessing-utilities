@@ -21,7 +21,7 @@ import org.scijava.plugin.Plugin;
  * 09 2018
  */
 
-@Plugin(type = Command.class, menuPath = "XWing>Projection>Tenengrad fusion")
+@Plugin(type = Command.class, menuPath = "SpimCat>Projection>Tenengrad fusion")
 public class TenengradFusionPlugin implements Command {
     @Parameter
     ImagePlus input;
