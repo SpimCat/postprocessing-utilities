@@ -90,6 +90,8 @@ public class MeasureQualityInTilesPlugin extends AbstractFocusMeasuresPlugin imp
 
         // convert CLImage<FloatType> to RandomAccessibleInterval<FloatType>
         RandomAccessibleInterval<FloatType> floatData = (RandomAccessibleInterval<FloatType>) clij.converter(floatTypeImage).getRandomAccessibleInterval();
+        anyTypeImage.close();
+        floatTypeImage.close();
 
         resultMaps = new HashMap<>();
 
