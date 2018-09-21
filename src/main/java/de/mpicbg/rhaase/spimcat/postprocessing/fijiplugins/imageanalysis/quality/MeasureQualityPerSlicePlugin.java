@@ -37,7 +37,7 @@ import java.util.HashMap;
  * 09 2018
  */
 
-@Plugin(type = Command.class, menuPath = "SpimCat>Quality measurement>Image Focus Measurements tiles IMP (Adapted Autopilot code, Royer et Al. 2016)")
+@Plugin(type = Command.class, menuPath = "SpimCat>Quality measurement>Image Focus Measurements slice by slice IMP (Adapted Autopilot code, Royer et Al. 2016)")
 public class MeasureQualityPerSlicePlugin extends AbstractFocusMeasuresPlugin implements
         Command, AllowsSilentProcessing, AllowsShowingTheResult {
 
