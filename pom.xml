@@ -14,7 +14,7 @@
 
 	<groupId>de.mpicbg.rhaase</groupId>
 	<artifactId>postprocessing-utilities</artifactId>
-	<version>0.2.8</version>
+	<version>0.2.9</version>
 
 	<name>postprocessing-utilities</name>
 	<description>postprocessing-utilities</description>
@@ -78,7 +78,7 @@
 		<package-name>de.mpicbg.haase</package-name>
 		<license.licenseName>bsd_3</license.licenseName>
 		<license.copyrightOwners>Robert Haase</license.copyrightOwners>
-		<imagej.app.directory>C:/Programs/Fiji.app/</imagej.app.directory>
+		<imagej.app.directory>C:/Programs/fiji-win64/Fiji.app/</imagej.app.directory>
 	</properties>
 
 	<repositories>
