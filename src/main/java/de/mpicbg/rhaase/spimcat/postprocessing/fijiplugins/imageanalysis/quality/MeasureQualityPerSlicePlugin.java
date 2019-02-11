@@ -100,7 +100,7 @@ public class MeasureQualityPerSlicePlugin extends AbstractFocusMeasuresPlugin im
             {
                 resultMatrix = new HashMap<FocusMeasures.FocusMeasure, double[]>();
             } else {
-                resultMatrix = null;
+                resultMatrix = new HashMap<FocusMeasures.FocusMeasure, double[]>();
                 IJ.log("Plotting is not possible for 2D images. Choose an image stack.");
             }
         }
@@ -111,6 +111,13 @@ public class MeasureQualityPerSlicePlugin extends AbstractFocusMeasuresPlugin im
         ResultsTable resultsTable = ResultsTable.getResultsTable();
         if (numDimensions == 2) {
             resultsTable.incrementCounter();
+            if (resultMatrix != null)
+            {
+                for (FocusMeasures.FocusMeasure focusMeasure : formerChoice)
+                {
+                    resultMatrix.put(focusMeasure, new double[1]);
+                }
+            }
             process2D(floatData, 0);
         } else if (numDimensions == 3) {
             int numberOfSlices = (int) floatData.dimension(2);

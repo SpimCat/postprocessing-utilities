@@ -80,7 +80,6 @@ public class MeasureQualityInTilesPlugin extends AbstractFocusMeasuresPlugin imp
             }
         }
 
-        int numDimensions = 3;
 
 
         // convert imageplus to CLImage<AnyType>
@@ -97,6 +96,7 @@ public class MeasureQualityInTilesPlugin extends AbstractFocusMeasuresPlugin imp
 
         resultMaps = new HashMap<>();
 
+        int numDimensions = floatData.numDimensions();
         if (numDimensions == 2) {
             for (FocusMeasures.FocusMeasure focusMeasure : formerChoice)
             {
