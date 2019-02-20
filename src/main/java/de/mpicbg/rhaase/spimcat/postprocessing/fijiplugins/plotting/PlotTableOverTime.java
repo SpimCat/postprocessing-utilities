@@ -1,6 +1,5 @@
 package de.mpicbg.rhaase.spimcat.postprocessing.fijiplugins.plotting;
 
-import autopilot.utils.math.Minimum;
 import fiji.util.gui.GenericDialogPlus;
 import ij.IJ;
 import ij.ImageJ;
@@ -8,7 +7,6 @@ import ij.gui.Plot;
 import ij.measure.ResultsTable;
 import org.apache.commons.math3.stat.descriptive.rank.Max;
 import org.apache.commons.math3.stat.descriptive.rank.Min;
-import org.codehaus.groovy.control.io.ReaderSource;
 import org.scijava.command.Command;
 import org.scijava.plugin.Plugin;
 
@@ -25,7 +23,8 @@ import org.scijava.plugin.Plugin;
 public class PlotTableOverTime implements Command {
 
     private static String outputFolder = "C:/structure/temp/plots/";
-    private static String column = "";
+    private static String columnX = "";
+    private static String columnY = "";
 
     private static String plotTitle = "";
     private static String plotXTitle = "X";
@@ -42,7 +41,8 @@ public class PlotTableOverTime implements Command {
 
         GenericDialogPlus gd = new GenericDialogPlus("Plot table time point by time point in a folder");
         gd.addDirectoryField("Input directory", outputFolder);
-        gd.addChoice("Column to plot:", table.getHeadings(), table.getHeadings()[0]);
+        gd.addChoice("X Column to plot:", table.getHeadings(), columnX);
+        gd.addChoice("Y Column to plot:", table.getHeadings(), columnY);
         gd.addStringField("Plot title", plotTitle);
         gd.addStringField("X label", plotXTitle);
         gd.addStringField("Y label", plotYTitle);
@@ -54,7 +54,8 @@ public class PlotTableOverTime implements Command {
             return;
         }
         outputFolder = gd.getNextString();
-        column = gd.getNextChoice();
+        columnX = gd.getNextChoice();
+        columnY = gd.getNextChoice();
 
         plotTitle = gd.getNextString();
         plotXTitle = gd.getNextString();
@@ -63,20 +64,17 @@ public class PlotTableOverTime implements Command {
         width = (int)gd.getNextNumber();
         height = (int)gd.getNextNumber();
 
-        int columnIndex = table.getColumnIndex(column);
+        int columnXIndex = table.getColumnIndex(columnX);
+        int columnYIndex = table.getColumnIndex(columnY);
 
-        double[] allValues = table.getColumnAsDoubles(columnIndex);
+        double[] allValues = table.getColumnAsDoubles(columnYIndex);
+        double[] allXAxis = table.getColumnAsDoubles(columnXIndex);
 
         double minValue = new Min().evaluate(allValues);
         double maxValue = new Max().evaluate(allValues);
 
-        double minX = 0;
-        double maxX = allValues.length - 1;
-
-        double[] allXAxis = new double[allValues.length];
-        for (int i = 0; i < allXAxis.length; i++ ) {
-            allXAxis[i] = i;
-        }
+        double minX = new Min().evaluate(allXAxis);
+        double maxX = new Max().evaluate(allXAxis);
 
         for (int i = 0; i < allXAxis.length; i++) {
             double[] values = new double[i+1];
@@ -94,6 +92,8 @@ public class PlotTableOverTime implements Command {
             String timepoint = "000000" + i;
             timepoint = timepoint.substring(timepoint.length() - 6, timepoint.length());
             IJ.saveAs(plot.getImagePlus(), "tif", outputFolder + timepoint + ".tif");
+
+            IJ.showProgress(i, allXAxis.length - 1);
         }
     }
 
