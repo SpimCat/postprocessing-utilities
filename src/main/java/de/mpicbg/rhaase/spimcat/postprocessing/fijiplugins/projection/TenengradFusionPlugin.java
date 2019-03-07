@@ -1,13 +1,12 @@
 package de.mpicbg.rhaase.spimcat.postprocessing.fijiplugins.projection;
 
-import clearcl.ClearCLImage;
-import clearcl.enums.ImageChannelDataType;
-import clearcl.imagej.ClearCLIJ;
-import clearcl.imagej.kernels.Kernels;
 import ij.IJ;
 import ij.ImageJ;
 import ij.ImagePlus;
 import ij.gui.GenericDialog;
+import net.haesleinhuepf.clij.CLIJ;
+import net.haesleinhuepf.clij.clearcl.ClearCLImage;
+import net.haesleinhuepf.clij.clearcl.enums.ImageChannelDataType;
 import org.scijava.command.Command;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
@@ -55,8 +54,8 @@ public class TenengradFusionPlugin implements Command {
             return null;
         }
 
-        ClearCLIJ clij = ClearCLIJ.getInstance();
-        ClearCLImage inputCLImage = clij.converter(input).getClearCLImage();
+        CLIJ clij = CLIJ.getInstance();
+        ClearCLImage inputCLImage = clij.convert(input, ClearCLImage.class);
         ClearCLImage outputCLImage = clij.createCLImage(new long[] {inputCLImage.getWidth(), inputCLImage.getHeight(), 1}, inputCLImage.getChannelDataType());
 
         ClearCLImage[] slices = new ClearCLImage[numberOfImages];
@@ -64,11 +63,11 @@ public class TenengradFusionPlugin implements Command {
             slices[i] = clij.createCLImage(new long[]{inputCLImage.getWidth(), inputCLImage.getHeight(), 1}, ImageChannelDataType.Float);
         }
 
-        Kernels.splitStack(clij, inputCLImage, slices);
+        clij.op().splitStack(inputCLImage, slices);
 
-        Kernels.tenengradFusion(clij, outputCLImage, new float[]{(float)blurWeightsSigmaX, (float)blurWeightsSigmaY, (float)blurWeightsSigmaZ}, slices);
+        clij.op().tenengradFusion(outputCLImage, new float[]{(float)blurWeightsSigmaX, (float)blurWeightsSigmaY, (float)blurWeightsSigmaZ}, slices);
 
-        ImagePlus output = clij.converter(outputCLImage).getImagePlus();
+        ImagePlus output = clij.convert(outputCLImage, ImagePlus.class);
 
         for (int i = 0; i < numberOfImages; i++) {
             slices[i].close();

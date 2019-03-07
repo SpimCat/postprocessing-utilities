@@ -8,6 +8,7 @@ import fiji.util.gui.GenericDialogPlus;
 import ij.IJ;
 import ij.ImagePlus;
 import ij.gui.GenericDialog;
+import net.imagej.ops.OpService;
 import org.scijava.command.Command;
 import org.scijava.plugin.Plugin;
 
@@ -31,8 +32,11 @@ public class HalfStackProjectionOnFolderPlugin implements Command {
     private static boolean transformTo8bit = true;
 
 
+    OpService ops;
+
     @Override
     public void run() {
+
         GenericDialogPlus gd = new GenericDialogPlus("Half stack projection on a folder");
         gd.addDirectoryField("Input directory", inputFolder);
         gd.addDirectoryField("Output directory", outputFolder);

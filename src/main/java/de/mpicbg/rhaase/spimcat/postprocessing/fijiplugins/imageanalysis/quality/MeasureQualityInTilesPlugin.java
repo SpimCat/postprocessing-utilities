@@ -3,10 +3,6 @@ package de.mpicbg.rhaase.spimcat.postprocessing.fijiplugins.imageanalysis.qualit
 import autopilot.image.DoubleArrayImage;
 import autopilot.measures.FocusMeasures;
 import autopilot.utils.ArrayMatrix;
-import clearcl.ClearCLImage;
-import clearcl.enums.ImageChannelDataType;
-import clearcl.imagej.ClearCLIJ;
-import clearcl.imagej.kernels.Kernels;
 import de.mpicbg.rhaase.scijava.AbstractFocusMeasuresPlugin;
 import de.mpicbg.rhaase.spimcat.postprocessing.fijiplugins.api.AllowsShowingTheResult;
 import de.mpicbg.rhaase.spimcat.postprocessing.fijiplugins.api.AllowsSilentProcessing;
@@ -14,6 +10,9 @@ import de.mpicbg.rhaase.utils.DoubleArrayImageImgConverter;
 import ij.IJ;
 import ij.ImagePlus;
 import ij.plugin.ImageCalculator;
+import net.haesleinhuepf.clij.CLIJ;
+import net.haesleinhuepf.clij.clearcl.ClearCLImage;
+import net.haesleinhuepf.clij.clearcl.enums.ImageChannelDataType;
 import net.imglib2.RandomAccess;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.Img;
@@ -41,20 +40,20 @@ public class MeasureQualityInTilesPlugin extends AbstractFocusMeasuresPlugin imp
         Command, AllowsSilentProcessing, AllowsShowingTheResult
 {
     final static int defaultTileSize = 16;
-    ClearCLIJ clij;
+    CLIJ clij;
 
 
     public MeasureQualityInTilesPlugin()
     {
         super();
-        clij = ClearCLIJ.getInstance();
+        clij = CLIJ.getInstance();
     }
 
     public MeasureQualityInTilesPlugin(ImagePlus imp, int numberOfTilesX, int numberOfTilesY) {
         this.numberOfTilesX = numberOfTilesX;
         this.numberOfTilesY = numberOfTilesY;
         currentData = imp;
-        clij = ClearCLIJ.getInstance();
+        clij = CLIJ.getInstance();
     }
 
     @Parameter
@@ -83,14 +82,14 @@ public class MeasureQualityInTilesPlugin extends AbstractFocusMeasuresPlugin imp
 
 
         // convert imageplus to CLImage<AnyType>
-        ClearCLImage anyTypeImage = clij.converter(currentData).getClearCLImage();
+        ClearCLImage anyTypeImage = clij.convert(currentData, ClearCLImage.class);
 
         // convert CLImage<AnyType> to CLImage<FloatType>
         ClearCLImage floatTypeImage = clij.createCLImage(anyTypeImage.getDimensions(), ImageChannelDataType.Float);
-        Kernels.copy(clij, anyTypeImage, floatTypeImage);
+        clij.op().copy(anyTypeImage, floatTypeImage);
 
         // convert CLImage<FloatType> to RandomAccessibleInterval<FloatType>
-        RandomAccessibleInterval<FloatType> floatData = (RandomAccessibleInterval<FloatType>) clij.converter(floatTypeImage).getRandomAccessibleInterval();
+        RandomAccessibleInterval<FloatType> floatData = (RandomAccessibleInterval<FloatType>) clij.convert(floatTypeImage, RandomAccessibleInterval.class);
         anyTypeImage.close();
         floatTypeImage.close();
 
@@ -190,7 +189,7 @@ public class MeasureQualityInTilesPlugin extends AbstractFocusMeasuresPlugin imp
 
         Img<FloatType> img = resultMaps.get(focusMeasure);
 
-        return clij.converter(img).getImagePlus();
+        return clij.convert(img, ImagePlus.class);
     }
 
     public static void main(String... args) throws IOException
@@ -216,13 +215,13 @@ public class MeasureQualityInTilesPlugin extends AbstractFocusMeasuresPlugin imp
         //mean.show();
         //mean.setTitle("mean");
 
-        ClearCLIJ clij = ClearCLIJ.getInstance();
-        ClearCLImage inputCL = clij.converter(input).getClearCLImage();
+        CLIJ clij = CLIJ.getInstance();
+        ClearCLImage inputCL = clij.convert(input, ClearCLImage.class);
         ClearCLImage outputCL = clij.createCLImage(inputCL);
 
-        Kernels.blurSliceBySlice(clij, inputCL, outputCL, 20, 20, 10,10);
+        clij.op().blurSliceBySlice(inputCL, outputCL, 20, 20, 10f, 10f);
 
-        ImagePlus output = clij.converter(outputCL).getImagePlus();
+        ImagePlus output = clij.convert(outputCL, ImagePlus.class);
 
         inputCL.close();
         outputCL.close();

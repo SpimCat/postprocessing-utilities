@@ -2,10 +2,6 @@ package de.mpicbg.rhaase.spimcat.postprocessing.fijiplugins.imageanalysis.qualit
 
 import autopilot.image.DoubleArrayImage;
 import autopilot.measures.FocusMeasures;
-import clearcl.ClearCLImage;
-import clearcl.enums.ImageChannelDataType;
-import clearcl.imagej.ClearCLIJ;
-import clearcl.imagej.kernels.Kernels;
 import de.mpicbg.rhaase.scijava.AbstractFocusMeasuresPlugin;
 import de.mpicbg.rhaase.spimcat.postprocessing.fijiplugins.api.AllowsShowingTheResult;
 import de.mpicbg.rhaase.spimcat.postprocessing.fijiplugins.api.AllowsSilentProcessing;
@@ -16,6 +12,9 @@ import ij.IJ;
 import ij.ImagePlus;
 import ij.gui.Plot;
 import ij.measure.ResultsTable;
+import net.haesleinhuepf.clij.CLIJ;
+import net.haesleinhuepf.clij.clearcl.ClearCLImage;
+import net.haesleinhuepf.clij.clearcl.enums.ImageChannelDataType;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.Img;
 import net.imglib2.img.display.imagej.ImageJFunctions;
@@ -79,17 +78,17 @@ public class MeasureQualityPerSlicePlugin extends AbstractFocusMeasuresPlugin im
             }
         }
 
-        ClearCLIJ clij = ClearCLIJ.getInstance();
+        CLIJ clij = CLIJ.getInstance();
 
         // convert imageplus to CLImage<AnyType>
-        ClearCLImage anyTypeImage = clij.converter(input).getClearCLImage();
+        ClearCLImage anyTypeImage = clij.convert(input, ClearCLImage.class);
 
         // convert CLImage<AnyType> to CLImage<FloatType>
         ClearCLImage floatTypeImage = clij.createCLImage(anyTypeImage.getDimensions(), ImageChannelDataType.Float);
-        Kernels.copy(clij, anyTypeImage, floatTypeImage);
+        clij.op().copy(anyTypeImage, floatTypeImage);
 
         // convert CLImage<FloatType> to RandomAccessibleInterval<FloatType>
-        RandomAccessibleInterval<FloatType> floatData = (RandomAccessibleInterval<FloatType>) clij.converter(floatTypeImage).getRandomAccessibleInterval();
+        RandomAccessibleInterval<FloatType> floatData = (RandomAccessibleInterval<FloatType>) clij.convert(floatTypeImage, RandomAccessibleInterval.class);
         anyTypeImage.close();
         floatTypeImage.close();
 

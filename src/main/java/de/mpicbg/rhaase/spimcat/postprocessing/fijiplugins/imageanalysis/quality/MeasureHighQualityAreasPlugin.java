@@ -1,15 +1,14 @@
 package de.mpicbg.rhaase.spimcat.postprocessing.fijiplugins.imageanalysis.quality;
 
 import autopilot.measures.FocusMeasures;
-import clearcl.ClearCLImage;
-import clearcl.enums.ImageChannelDataType;
-import clearcl.imagej.ClearCLIJ;
-import clearcl.imagej.kernels.Kernels;
 import de.mpicbg.rhaase.scijava.AbstractFocusMeasuresPlugin;
 import de.mpicbg.rhaase.spimcat.postprocessing.fijiplugins.api.AllowsShowingTheResult;
 import de.mpicbg.rhaase.spimcat.postprocessing.fijiplugins.api.AllowsSilentProcessing;
 import ij.IJ;
 import ij.ImagePlus;
+import net.haesleinhuepf.clij.CLIJ;
+import net.haesleinhuepf.clij.clearcl.ClearCLImage;
+import net.haesleinhuepf.clij.clearcl.enums.ImageChannelDataType;
 import org.scijava.command.Command;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
@@ -62,18 +61,18 @@ public class MeasureHighQualityAreasPlugin implements
         ImagePlus qualityMap = mqitp.analyseFocusMeasure(FocusMeasures.FocusMeasure.DifferentialTenengrad);
 
         // determine area of high quality pixels
-        ClearCLIJ clij = ClearCLIJ.getInstance();
-        ClearCLImage inputCL = clij.converter(qualityMap).getClearCLImage();
+        CLIJ clij = CLIJ.getInstance();
+        ClearCLImage inputCL = clij.convert(qualityMap, ClearCLImage.class);
         ClearCLImage thresholdMaskCL = clij.createCLImage(inputCL.getDimensions(), ImageChannelDataType.UnsignedInt8);
 
-        double sum = Kernels.sumPixels(clij, inputCL);
+        double sum = clij.op().sumPixels(inputCL);
 
         double average = sum / inputCL.getWidth() / inputCL.getHeight() / inputCL.getDepth();
 
 
-        Kernels.threshold(clij, inputCL, thresholdMaskCL, (float)average);
+        clij.op().threshold(inputCL, thresholdMaskCL, (float)average);
 
-        output = clij.converter(thresholdMaskCL).getImagePlus();
+        output = clij.convert(thresholdMaskCL, ImagePlus.class);
         inputCL.close();
         thresholdMaskCL.close();
 
@@ -94,13 +93,13 @@ public class MeasureHighQualityAreasPlugin implements
 
         new MeasureHighQualityAreasPlugin(input).run();
 
-        ClearCLIJ clij = ClearCLIJ.getInstance();
-        ClearCLImage inputCL = clij.converter(input).getClearCLImage();
+        CLIJ clij = CLIJ.getInstance();
+        ClearCLImage inputCL = clij.convert(input, ClearCLImage.class);
         ClearCLImage outputCL = clij.createCLImage(inputCL);
 
-        Kernels.blurSliceBySlice(clij, inputCL, outputCL, 20, 20, 10,10);
+        clij.op().blurSliceBySlice(inputCL, outputCL, 20, 20, 10f, 10f);
 
-        ImagePlus output = clij.converter(outputCL).getImagePlus();
+        ImagePlus output = clij.convert(outputCL, ImagePlus.class);
 
         inputCL.close();
         outputCL.close();
