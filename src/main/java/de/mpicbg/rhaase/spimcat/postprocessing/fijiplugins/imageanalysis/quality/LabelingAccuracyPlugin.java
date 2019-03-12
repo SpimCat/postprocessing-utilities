@@ -18,7 +18,7 @@ import org.scijava.plugin.Plugin;
 import java.util.Arrays;
 
 /**
- * SegmentationAccuracyPlugin
+ * LabelingAccuracyPlugin
  * <p>
  * <p>
  * <p>
@@ -26,8 +26,8 @@ import java.util.Arrays;
  * 03 2019
  */
 
-@Plugin(type = Command.class, menuPath = "SpimCat>Quality measurement>Image Focus Measurements slice by slice IMP (Adapted Autopilot code, Royer et Al. 2016)")
-public class SegmentationAccuracyPlugin implements Command {
+@Plugin(type = Command.class, menuPath = "SpimCat>Quality measurement>Labeling accuracy")
+public class LabelingAccuracyPlugin implements Command {
 
     ImagePlus input;
     ImagePlus groundTruth;
