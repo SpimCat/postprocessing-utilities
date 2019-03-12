@@ -31,6 +31,7 @@ public class LabelingAccuracyPlugin implements Command {
 
     ImagePlus input;
     ImagePlus groundTruth;
+    double minimumObjectOverlap = 0.5;
 
     @Override
     public void run() {
@@ -39,7 +40,7 @@ public class LabelingAccuracyPlugin implements Command {
             return;
         }
 
-        double accuracy = accuracy(input, groundTruth);
+        double accuracy = accuracy(input, groundTruth, minimumObjectOverlap);
 
         ResultsTable table = ResultsTable.getResultsTable();
         table.incrementCounter();
@@ -49,8 +50,9 @@ public class LabelingAccuracyPlugin implements Command {
 
     private boolean showDialog() {
         GenericDialogPlus gd = new GenericDialogPlus("Determine accuracy of a label map");
-        gd.addImageChoice("Label map", "");
-        gd.addImageChoice("Ground truth", "");
+        gd.addImageChoice("Label_map", "");
+        gd.addImageChoice("Ground_truth", "");
+        gd.addNumericField("Minimum_object_overlap", minimumObjectOverlap, 2);
         gd.showDialog();
 
         if (gd.wasCanceled()) {
@@ -59,11 +61,16 @@ public class LabelingAccuracyPlugin implements Command {
 
         input = gd.getNextImage();
         groundTruth = gd.getNextImage();
+        minimumObjectOverlap = gd.getNextNumber();
 
         return true;
     }
 
     public static double accuracy(ImagePlus input, ImagePlus groundTruth) {
+        return accuracy(input, groundTruth, 0.5);
+    }
+
+    public static double accuracy(ImagePlus input, ImagePlus groundTruth, double minimumObjectOverlap) {
 
         Img<FloatType> img = ImageJFunctions.convertFloat(input);
         Img<FloatType> gt = ImageJFunctions.convertFloat(groundTruth);
@@ -83,6 +90,9 @@ public class LabelingAccuracyPlugin implements Command {
         int maxGT = (int) max.get() + 1;
 
         long[][] counts = new long[maxImg][maxGT];
+        long[] countsImg = new long[maxImg];
+        long[] countsGT = new long[maxGT];
+
 
 
         while (cursor.hasNext() && cursorGT.hasNext()) {
@@ -90,6 +100,8 @@ public class LabelingAccuracyPlugin implements Command {
             int intensityGt = (int) cursorGT.next().get();
 
             counts[intensityImg][intensityGt]++;
+            countsImg[intensityImg]++;
+            countsGT[intensityGt]++;
         }
 
 
@@ -108,49 +120,42 @@ public class LabelingAccuracyPlugin implements Command {
         int fn = 0;
         int fp = 0;
         for (int i = 1; i < maxImg; i++) {
-            int sum = 0;
-            for (int g = 0; g < maxGT; g++) {
-                sum += counts[i][g];
-            }
-
-            int minimumPixelsToBeTrue = sum / 2;
-
             boolean found = false;
             for (int g = 1; g < maxGT; g++) {
-                if (counts[i][g] > minimumPixelsToBeTrue) {
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
-                fp++;
-                System.out.print("FP " );
-            }
-        }
-
-        for (int g = 1; g < maxGT; g++) {
-            int sum = 0;
-            for (int i = 0; i < maxImg; i++) {
-                sum += counts[i][g];
-            }
-
-            int minimumPixelsToBeFalseNegative = sum / 2;
-
-            boolean found = false;
-            for (int i = 1; i < maxImg; i++) {
-                if (counts[i][g] > minimumPixelsToBeFalseNegative) {
+                double intersection = counts[i][g];
+                double union = countsImg[i] + countsGT[g] - counts[i][g];
+                double jaccardIndex = intersection / union;
+                if (jaccardIndex > minimumObjectOverlap) {
                     found = true;
                     break;
                 }
             }
             if (found) {
-                System.out.print("TP " );
                 tp++;
             } else {
-                System.out.print("FN " );
+                fp++;
+            }
+        }
+
+        for (int g = 1; g < maxGT; g++) {
+            boolean found = false;
+            for (int i = 1; i < maxImg; i++) {
+                double intersection = counts[i][g];
+                double union = countsImg[i] + countsGT[g] - counts[i][g];
+                double jaccardIndex = intersection / union;
+                if (jaccardIndex > minimumObjectOverlap) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
                 fn++;
             }
         }
+
+        System.out.println("TP " + tp);
+        System.out.println("FN " + fn);
+        System.out.println("FP " + fp);
 
         double accuracy = (double)tp / (tp + fn + fp);
         return accuracy;
