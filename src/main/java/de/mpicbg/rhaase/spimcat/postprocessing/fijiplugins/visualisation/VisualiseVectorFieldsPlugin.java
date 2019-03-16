@@ -12,6 +12,7 @@ import ij.gui.Line;
 import ij.gui.NewImage;
 import ij.gui.Overlay;
 import ij.plugin.Duplicator;
+import ij.plugin.OverlayCommands;
 import ij.process.ImageProcessor;
 import net.imagej.lut.LUTService;
 import org.scijava.command.Command;
@@ -123,9 +124,11 @@ public class VisualiseVectorFieldsPlugin implements Command, AllowsSilentProcess
             }
         }
         imp.setOverlay(overlay);
+
         imp.show();
         IJ.run(imp, "Flatten", "");
         imp.show();
+        IJ.run("Close All");
         outputImage = imp;
 
         if (showResult) {
@@ -193,6 +196,38 @@ public class VisualiseVectorFieldsPlugin implements Command, AllowsSilentProcess
     @Override
     public void setShowResult(boolean value) {
         showResult = value;
+    }
+
+    public void setInvertVectors(boolean invertVectors) {
+        this.invertVectors = invertVectors;
+    }
+
+    public void setLineWidth(float lineWidth) {
+        this.lineWidth = lineWidth;
+    }
+
+    public void setLookupTable(String lookupTable) {
+        this.lookupTable = lookupTable;
+    }
+
+    public void setMaximumLength(double maximumLength) {
+        this.maximumLength = maximumLength;
+    }
+
+    public void setMinimumLength(double minimumLength) {
+        this.minimumLength = minimumLength;
+    }
+
+    public void setStepSize(int stepSize) {
+        this.stepSize = stepSize;
+    }
+
+    public void setVectorXImage(ImagePlus vectorXImage) {
+        this.vectorXImage = vectorXImage;
+    }
+
+    public void setVectorYImage(ImagePlus vectorYImage) {
+        this.vectorYImage = vectorYImage;
     }
 
     public static void main(String... args) {
