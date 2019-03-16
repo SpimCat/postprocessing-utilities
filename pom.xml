@@ -86,7 +86,14 @@
 			<id>imagej.public</id>
 			<url>http://maven.imagej.net/content/groups/public</url>
 		</repository>
-
+		<repository>
+			<id>hslh</id>
+			<url>http://dl.bintray.com/haesleinhuepf/snapshots</url>
+		</repository>
+		<repository>
+			<id>clij</id>
+			<url>http://dl.bintray.com/haesleinhuepf/clij</url>
+		</repository>
 	</repositories>
 
 	<dependencies>
@@ -123,7 +130,7 @@
         <dependency>
             <groupId>de.mpicbg.rhaase</groupId>
             <artifactId>imagequalitymetrics-microscopeautopilot</artifactId>
-            <version>0.1.4</version>
+            <version>0.2.0</version>
         </dependency>
 		<dependency>
 			<groupId>net.haesleinhuepf</groupId>
