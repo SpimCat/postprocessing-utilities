@@ -125,11 +125,10 @@ public class VisualiseVectorFieldsPlugin implements Command, AllowsSilentProcess
         }
         imp.setOverlay(overlay);
 
-        imp.show();
-        IJ.run(imp, "Flatten", "");
-        imp.show();
-        IJ.run("Close All");
-        outputImage = imp;
+        //imp.show();
+        //IJ.run(imp, "Flatten", "");
+        //imp.show();
+        outputImage = imp.flatten();
 
         if (showResult) {
             outputImage.show();
