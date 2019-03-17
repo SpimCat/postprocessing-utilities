@@ -8,17 +8,24 @@ import fiji.util.gui.GenericDialogPlus;
 import ij.IJ;
 import ij.ImageJ;
 import ij.ImagePlus;
+import ij.LookUpTable;
 import ij.gui.Line;
 import ij.gui.NewImage;
 import ij.gui.Overlay;
 import ij.plugin.Duplicator;
+import ij.plugin.LUT_Editor;
+import ij.plugin.LutLoader;
 import ij.plugin.OverlayCommands;
 import ij.process.ImageProcessor;
+import ij.process.LUT;
 import net.imagej.lut.LUTService;
 import org.scijava.command.Command;
 import org.scijava.plugin.Plugin;
 
 import java.awt.*;
+import java.awt.image.IndexColorModel;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * VisualiseVectorFieldsPlugin
@@ -44,6 +51,8 @@ public class VisualiseVectorFieldsPlugin implements Command, AllowsSilentProcess
     private int stepSize = 10;
     private float lineWidth = 2;
     private boolean invertVectors = true;
+    private String lutFolder = "C:/Programs/fiji-win64/Fiji.app/luts/";
+
 
     private final int finalColorStep = 100;
 
@@ -57,7 +66,35 @@ public class VisualiseVectorFieldsPlugin implements Command, AllowsSilentProcess
 
         // create LUT
         ImagePlus lutImp = NewImage.createByteImage("Untitled", (int)(maximumLength * finalColorStep), 1, 1, NewImage.FILL_RAMP);
-        IJ.run(lutImp, lookupTable, "");
+        String lutFilename = lutFolder + lookupTable + ".lut";
+        if (new File(lutFilename).exists()) {
+            try {
+                IndexColorModel lut1 = LutLoader.open(lutFilename);
+                LookUpTable lut2 = new LookUpTable(lut1);
+
+                byte[] reds = new byte[lut2.getMapSize()];
+                lut1.getReds(reds);
+                byte[] greens = new byte[lut2.getMapSize()];
+                lut1.getGreens(greens);
+                byte[] blues = new byte[lut2.getMapSize()];
+                lut1.getBlues(blues);
+
+                LUT lut3 = new LUT(reds, greens, blues);
+                lutImp.setLut(lut3);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        } else {
+            String [] luts = IJ.getLuts();
+            for (String lutname : luts) {
+                if (lutname.compareTo(lookupTable) == 0) {
+                    IJ.run(lutImp, lookupTable, "");
+                    break;
+                }
+            }
+        }
         //lutImp = IJ.getImage();
         IJ.run(lutImp, "RGB Color", "");
         //lutImp = IJ.getImage();
@@ -146,6 +183,7 @@ public class VisualiseVectorFieldsPlugin implements Command, AllowsSilentProcess
         gd.addImageChoice("Vector_X image", defaultImage);
         gd.addImageChoice("Vector_Y image", defaultImage);
 
+        gd.addStringField("LUT folder", lutFolder);
         gd.addStringField("Lookup_table", lookupTable);
 
         gd.addNumericField("Minimum_length (in pixels, ignore below)", minimumLength, 2);
@@ -227,6 +265,10 @@ public class VisualiseVectorFieldsPlugin implements Command, AllowsSilentProcess
 
     public void setVectorYImage(ImagePlus vectorYImage) {
         this.vectorYImage = vectorYImage;
+    }
+
+    public void setLutFolder(String lutFolder) {
+        this.lutFolder = lutFolder;
     }
 
     public static void main(String... args) {
