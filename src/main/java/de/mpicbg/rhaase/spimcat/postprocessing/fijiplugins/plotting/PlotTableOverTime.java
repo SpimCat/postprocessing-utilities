@@ -26,18 +26,19 @@ public class PlotTableOverTime implements Command {
     private static String columnX = "";
     private static String columnY = "";
 
-    private static String plotTitle = "";
-    private static String plotXTitle = "X";
-    private static String plotYTitle = "Y";
+    public static String plotTitle = "";
+    public static String plotXTitle = "X";
+    public static String plotYTitle = "Y";
 
-    private static int width = 400;
-    private static int height = 300;
+    public static int width = 400;
+    public static int height = 300;
 
 
     @Override
     public void run() {
 
         ResultsTable table = ResultsTable.getResultsTable();
+
 
         GenericDialogPlus gd = new GenericDialogPlus("Plot table time point by time point in a folder");
         gd.addDirectoryField("Input directory", outputFolder);
@@ -77,17 +78,7 @@ public class PlotTableOverTime implements Command {
         double maxX = new Max().evaluate(allXAxis);
 
         for (int i = 0; i < allXAxis.length; i++) {
-            double[] values = new double[i+1];
-            double[] xAxis = new double[i+1];
-
-            System.arraycopy(allValues, 0, values, 0, values.length);
-            System.arraycopy(allXAxis, 0, xAxis, 0, values.length);
-
-            Plot plot = new Plot(plotTitle, plotXTitle, plotYTitle);
-            plot.add("line", xAxis, values);
-            plot.setLimits(minX, maxX, minValue, maxValue);
-            plot.setSize(width, height);
-            //plot.show();
+            Plot plot = getPlot(allValues, allXAxis, minValue, maxValue, minX, maxX, i);
 
             String timepoint = "000000" + i;
             timepoint = timepoint.substring(timepoint.length() - 6, timepoint.length());
@@ -95,6 +86,21 @@ public class PlotTableOverTime implements Command {
 
             IJ.showProgress(i, allXAxis.length - 1);
         }
+    }
+
+    public static Plot getPlot(double[] allValues, double[] allXAxis, double minValue, double maxValue, double minX, double maxX, int i) {
+        double[] values = new double[i+1];
+        double[] xAxis = new double[i+1];
+
+        System.arraycopy(allValues, 0, values, 0, values.length);
+        System.arraycopy(allXAxis, 0, xAxis, 0, values.length);
+
+        Plot plot = new Plot(plotTitle, plotXTitle, plotYTitle);
+        plot.add("line", xAxis, values);
+        plot.setLimits(minX, maxX, minValue, maxValue);
+        plot.setSize(width, height);
+        //plot.show();
+        return plot;
     }
 
     public static void main(String... args) {
