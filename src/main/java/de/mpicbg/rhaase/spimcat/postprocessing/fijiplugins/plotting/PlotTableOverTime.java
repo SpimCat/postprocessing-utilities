@@ -42,13 +42,13 @@ public class PlotTableOverTime implements Command {
 
         GenericDialogPlus gd = new GenericDialogPlus("Plot table time point by time point in a folder");
         gd.addDirectoryField("Input directory", outputFolder);
-        gd.addChoice("X Column to plot:", table.getHeadings(), columnX);
-        gd.addChoice("Y Column to plot:", table.getHeadings(), columnY);
-        gd.addStringField("Plot title", plotTitle);
-        gd.addStringField("X label", plotXTitle);
-        gd.addStringField("Y label", plotYTitle);
-        gd.addNumericField("Plot width", width, 0);
-        gd.addNumericField("Plot height", height, 0);
+        gd.addChoice("X_Column_to_plot:", table.getHeadings(), columnX);
+        gd.addChoice("Y_Column_to_plot:", table.getHeadings(), columnY);
+        gd.addStringField("Plot_title", plotTitle);
+        gd.addStringField("X_label", plotXTitle);
+        gd.addStringField("Y_label", plotYTitle);
+        gd.addNumericField("Plot_width", width, 0);
+        gd.addNumericField("Plot_height", height, 0);
 
         gd.showDialog();
         if (gd.wasCanceled()) {
